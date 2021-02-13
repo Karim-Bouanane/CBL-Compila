@@ -27,6 +27,15 @@ const char *dataType_tokens[] =
 // Size of dataType_tokens list
 #define SIZE_TOKENSLIST_DATATYPE sizeof(dataType_tokens) / sizeof(dataType_tokens[0])
 
+/* Tokens des conditions et des boucles */
+const char *conditionloop_tokensName[] =
+    {"IF", "ELIF", "WHILE", "DO", "FOR", "IN"};
+const char *conditionloop_tokens[] =
+    {"if", "elif", "while", "do", "for", "in"};
+
+// Size of dataType_tokens list
+#define SIZE_TOKENSLIST_CONDITIONLOOP sizeof(conditionloop_tokens) / sizeof(conditionloop_tokens[0])
+
 /* Tokens des opérateurs arithmétique, comparaison, affectation, logique */
 const char *operatorSymb_tokensName[] =
     {"PLUS", "MOINS", "DIV", "MODULO", "MULT", "POWER", "EG", "DIFF", "INFEG", "INF", "SUPEG", "SUP", "ASSIGN", "AND", "OR"};
@@ -43,4 +52,4 @@ const char *specialSymb_tokens[] =
     {";", ":", ",", "_", ".", "(", ")"};
 
 // Size of specialSymb_tokens list
-#define SIZE_TOKENSLIST_SPECIALSYMB sizeof(operatorSymb_tokens) / sizeof(operatorSymb_tokens[0])
+#define SIZE_TOKENSLIST_SPECIALSYMB sizeof(specialSymb_tokens) / sizeof(specialSymb_tokens[0])
