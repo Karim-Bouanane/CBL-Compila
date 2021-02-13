@@ -1,0 +1,20 @@
+Libraries :
+lib : name,name2;
+H : header1,header2;
+Constants : 
+x,y,z
+Variables : 
+Com : je test ce programe; 
+t,q,u
+Functions :
+function1(){}
+function2(){
+    Do {
+        For i in (1,u){
+
+        }
+    }while(q<100)
+}
+Main(): 
+function1(x)
+function2(t)
