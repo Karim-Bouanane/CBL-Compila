@@ -30,7 +30,7 @@ void comment(){
 	get_token();
 }
 void error(char* message){
-	printf("%s",message);
+	printf("syntax error %s",message);
 	exit(0);
 }
 void program(){
@@ -61,10 +61,7 @@ void program(){
 		functions();
 	}
 	if(strcmp(currentToken,"MAIN_TOKEN")==0){
-		get_token();
-		if(strcmp(currentToken,"DP_TOKEN")!=0)
-			error("DP_token error");
-		//Main();
+		Main();
 	}
 	else error("bloc main missing");
 }
@@ -112,8 +109,25 @@ void variables(){
 		else error("PV_token error");
 	}
 }
-void functions(){
-	
+void functions(){	
+}
+void Main(){
+	get_token();
+	if(strcmp(currentToken,"PO_TOKEN")!=0)
+		error("main error");
+	get_token();
+	while(strcmp(currentToken,"ID_TOKEN")==0){
+		get_token();
+		if(strcmp(currentToken,"PV_TOKEN")==0){
+			get_token();
+			continue;
+		}
+		else break;
+	}
+	if(strcmp(currentToken,"PF_TOKEN")!=0)
+		error("main error");
+	//inside main bloc
+	insts();
 }
 void is_value(){
 	get_token();
