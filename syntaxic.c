@@ -109,8 +109,94 @@ void variables(){
 		else error("PV_token error");
 	}
 }
+-------FUNC--------------------
 void functions(){
+	get_token();
+	if(strcmp(currentToken,"ID_TOKEN")!=0)
+		error("id missing");
+	get_token();
+	if(strcmp(currentToken,"PO_TOKEN")!=0)
+		error("PO missing");
+	get_token();
+	if(strcmp(currentToken,"ID_TOKEN")==0){
+		get_token();
+		while(strcmp(currentToken,"VIR_TOKEN")==0){
+			get_token();
+			if(strcmp(currentToken,"ID_TOKEN")!=0)
+				error("ID missing");
+			get_token();
+		}
+	}
+	if(strcmp(currentToken,"PF_TOKEN")!=0)
+		error("PO missing");
+	get_token();
+	if((strcmp(currentToken,"CBO_TOKEN")!=0))
+		error("CBO missing");
+	get_token();
+	if(strcmp(currentToken,"CONST_TOKEN")==0){
+		get_token();
+		if(strcmp(currentToken,"DP_TOKEN")!=0)
+			error("DP_token error");
+		constants();
+	}
+	if(strcmp(currentToken,"VAR_TOKEN")==0){
+		get_token();
+		if(strcmp(currentToken,"DP_TOKEN")!=0)
+			error("DP_token error");
+		variables();
+	}
+	Insts();
+	if((strcmp(currentToken,"CBF_TOKEN")!=0))
+		error("CBF missing");
+	printf("bloc function compiled succefuly");
+	get_token();	
 }
+------------INSTS-----------
+void Insts(){
+  while(Inst());
+  get_token();
+}
+-----------INST------------
+bool Inst(){
+	if (strcmp(currentToken,"IDF_TOKEN")==0){
+		CallFunction();
+	}else if (strcmp(currentToken,"Return_TOKEN")==0){
+		is_value();
+	}else if(strcmp(currentToken,"IF_TOKEN")==0){
+		decision();
+	}else if(strcmp(currentToken,"FOR_TOKEN")==0){
+		Loop();
+	}else return FALSE;
+    
+	return TRUE;
+}
+-----------CALLFUNCTION--------
+void CallFunction(){
+		get_token();
+		if (strcmp(currentToken,"PO_TOKEN")==0){
+			get_token();
+			if(strcmp(currentToken,"ID_TOKEN")==0){
+				get_token();
+				while((strcmp(currentToken,"VIR_TOKEN")==0)){
+					get_token();
+					if(strcmp(currentToken,"ID_TOKEN")!=0)
+						error("id missing");
+					get_token();
+				}
+			}
+		}
+		else error("PO missing");
+		if (strcmp(currentToken,"PF_TOKEN")!=0)
+			error("PF missing");
+		get_token();
+		if(strcmp(currentToken,"PV_TOKEN")==0){
+			get_token();
+			//continue;
+		}
+				
+	}
+
+-------MAIN--------------------	
 void Main(){
 	get_token();
 	if(strcmp(currentToken,"PO_TOKEN")!=0)
