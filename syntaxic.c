@@ -109,7 +109,7 @@ void variables(){
 		else error("PV_token error");
 	}
 }
-void functions(){	
+void functions(){
 }
 void Main(){
 	get_token();
@@ -126,8 +126,123 @@ void Main(){
 	}
 	if(strcmp(currentToken,"PF_TOKEN")!=0)
 		error("main error");
+	get_token();
+	if(strcmp(currentToken,"DP_TOKEN")!=0)
+		error("main error");
 	//inside main bloc
 	insts();
+}
+//Condition:(exp Comp_Op exp) {logic_op (exp com_op exp)}
+void condition(){
+	do{
+		get_token();
+		if(strcmp(currentToken,"PO_TOKEN")!=0)
+			error("condition error");
+		exp();
+		for(int i = 0; i < 6; i++){
+			if(strcmp(currentToken, Comp_Op[i]) == 0)
+				break;
+		}
+		if(i == 6)
+			error("condition has no comp op");
+		exp();
+		if(strcmp(currentToken,"PF_TOKEN")!=0)
+			error("')' missing");
+		else get_token();
+	}while((strcmp(currentToken,"AND_TOKEN")==0) || (strcmp(currentToken,"OR_TOKEN")==0));
+}
+//Loop: for ID in Value { Insts } 
+//      | for ID in (Num, Num) { Insts } 
+//      | while (condition ){ Insts } 
+//      |   do{ Ints }while (condition);
+void loop(){
+	//for
+	get_token();
+	if(strcmp(currentToken,"FOR_TOKEN")==0){
+		get_token();
+		if(strcmp(currentToken,"ID_TOKEN")!=0)
+			error("loop for id undeclared")
+		get_token();
+		if(strcmp(currentToken,"IN_TOKEN")!=0)
+			error("loop");
+		get_token();
+		if(strcmp(currentToken,"PO_TOKEN")==0){
+			get_token();
+			if(strcmp(currentToken,"NUM_TOKEN")!=0)
+				error("loop");
+			get_token();
+			if(strcmp(currentToken,"VIR_TOKEN")!=0)
+				error("loop");
+			get_token();
+			if(strcmp(currentToken,"NUM_TOKEN")!=0)
+				error("loop");
+			get_token();
+			if(strcmp(currentToken,"PF_TOKEN")!=0)
+				error("loop");
+			get_token();
+		}else is_value();
+		if(strcmp(currentToken,"CBO_TOKEN")!=0)
+			error("loop");
+		insts();
+		//get_token();
+		if(strcmp(currentToken,"CBF_TOKEN")!=0)
+			error("loop");
+	}//while
+	else if(strcmp(currentToken,"WHILE_TOKEN")==0){
+		condition();
+		if(strcmp(currentToken,"CBO_TOKEN")!=0)
+			error("loop");
+		insts();
+		//get_token();
+		if(strcmp(currentToken,"CBF_TOKEN")!=0)
+			error("loop");
+	}//do while
+	else if(strcmp(currentToken,"DO_TOKEN")==0){
+		if(strcmp(currentToken,"CBO_TOKEN")!=0)
+			error("loop");
+		insts();
+		//get_token();
+		if(strcmp(currentToken,"CBF_TOKEN")!=0)
+			error("loop");
+		get_token();
+		if(strcmp(currentToken,"WHILE_TOKEN")!=0)
+			error("loop");
+		condition();
+		if(strcmp(currentToken,"PV_TOKEN")!=0)
+			error("loop");
+	}
+}
+//EXPR::=TERM { [+|-] TERM } || callFunction || value
+void expr(){
+	get_token();
+	//callFunction();
+	do{
+		Term();
+	}while((strcmp(currentToken,"PLUS_TOKEN")==0) || (strcmp(currentToken,"MOINS_TOKEN")==0));
+	is_value();
+}
+//TERM::=FACT {[*|/|^|%] FACT}
+void term(){
+	do{
+		Fact();
+		get_token();
+	}while((strcmp(currentToken,"MULT_TOKEN")==0) || (strcmp(currentToken,"DIV_TOKEN")==0) 
+		|| (strcmp(currentToken,"POWER_TOKEN")==0) || (strcmp(currentToken,"MOD_TOKEN")==0));
+}
+//FACT::=ID | NUM | (EXPR)
+void fact(){
+	get_token();
+	if(strcmp(currentToken,"ID_TOKEN")==0)
+		return;
+	else if(strcmp(currentToken,"PO_TOKEN")==0){
+		exp();
+		if(strcmp(currentToken,"PF_TOKEN")!=0)
+			error("expression error");
+		return;
+	}
+	else if(strcmp(currentToken,"NUM_TOKEN")==0)
+		return;
+	else error("expression");
 }
 void is_value(){
 	get_token();
