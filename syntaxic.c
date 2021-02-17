@@ -164,7 +164,8 @@ bool Inst(){
 		is_value();
 	}else if(strcmp(currentToken,"IF_TOKEN")==0){
 		//decision();
-	}else if(strcmp(currentToken,"FOR_TOKEN")==0){
+	}else if(strcmp(currentToken,"FOR_TOKEN")==0 || strcmp(currentToken,"DO_TOKEN")==0
+		|| strcmp(currentToken,"WHILE_TOKEN")==0){
 		loop();
 	}else return FALSE;
     
@@ -216,6 +217,7 @@ void Main(){
 	if(strcmp(currentToken,"DP_TOKEN")!=0)
 		error("main error");
 	//inside main bloc
+	get_token();
 	Insts();
 }
 //Condition:(exp Comp_Op exp) {logic_op (exp com_op exp)}
@@ -239,12 +241,11 @@ void condition(){
 	}while((strcmp(currentToken,"AND_TOKEN")==0) || (strcmp(currentToken,"OR_TOKEN")==0));
 }
 //Loop: for ID in Value { Insts } 
-//      | for ID in (Num, Num) { Insts } 
+//      | for ID in (Num|ID, Num|ID) { Insts } 
 //      | while (condition ){ Insts } 
 //      |   do{ Ints }while (condition);
 void loop(){
 	//for
-	get_token();
 	if(strcmp(currentToken,"FOR_TOKEN")==0){
 		get_token();
 		if(strcmp(currentToken,"ID_TOKEN")!=0)
@@ -255,13 +256,13 @@ void loop(){
 		get_token();
 		if(strcmp(currentToken,"PO_TOKEN")==0){
 			get_token();
-			if(strcmp(currentToken,"NUM_TOKEN")!=0)
+			if(strcmp(currentToken,"NUM_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
 				error("loop");
 			get_token();
 			if(strcmp(currentToken,"VIR_TOKEN")!=0)
 				error("loop");
 			get_token();
-			if(strcmp(currentToken,"NUM_TOKEN")!=0)
+			if(strcmp(currentToken,"NUM_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
 				error("loop");
 			get_token();
 			if(strcmp(currentToken,"PF_TOKEN")!=0)
@@ -270,6 +271,7 @@ void loop(){
 		}else is_value();
 		if(strcmp(currentToken,"CBO_TOKEN")!=0)
 			error("loop");
+		get_token();
 		Insts();
 		//get_token();
 		if(strcmp(currentToken,"CBF_TOKEN")!=0)
@@ -279,14 +281,17 @@ void loop(){
 		condition();
 		if(strcmp(currentToken,"CBO_TOKEN")!=0)
 			error("loop");
+		get_token();
 		Insts();
 		//get_token();
 		if(strcmp(currentToken,"CBF_TOKEN")!=0)
 			error("loop");
 	}//do while
 	else if(strcmp(currentToken,"DO_TOKEN")==0){
+		get_token();
 		if(strcmp(currentToken,"CBO_TOKEN")!=0)
 			error("loop");
+		get_token();
 		Insts();
 		//get_token();
 		if(strcmp(currentToken,"CBF_TOKEN")!=0)
