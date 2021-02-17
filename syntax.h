@@ -4,6 +4,9 @@
 FILE* tokens_file;
 char *currentToken;
 
+#define TRUE    1
+#define FALSE   0
+
 const char* Comp_Op[] = {"EG_TOKEN", "DIFF_TOKEN", "INFEG_TOKEN", 
 					"INF_TOKEN", "SUPEG_TOKEN", "SUP_TOKEN"};
 void get_token();
@@ -16,9 +19,11 @@ void variables();
 void functions();
 void Main();
 void is_value();
-void insts();
-void inst();
+void Insts();
+bool Inst();
+void CallFunction();
 void condition();
+void decision();
 void loop();
 void expr();
 void term();
