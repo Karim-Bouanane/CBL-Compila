@@ -178,7 +178,7 @@ bool Inst(){
 			error("pv missing");
 		get_token();
 	}else if(strcmp(currentToken,"IF_TOKEN")==0){
-		//decision();
+		decision();
 	}else if(strcmp(currentToken,"FOR_TOKEN")==0 || strcmp(currentToken,"DO_TOKEN")==0
 		|| strcmp(currentToken,"WHILE_TOKEN")==0){
 		loop();
@@ -313,6 +313,36 @@ void loop(){
 		condition();
 		if(strcmp(currentToken,"PV_TOKEN")!=0)
 			error("loophhh");
+	}
+}
+void decision(){
+	condition();
+	if(strcmp(currentToken,"CBO_TOKEN")!=0)
+		error("{ missing");
+	get_token();
+	Insts();
+	if(strcmp(currentToken,"CBF_TOKEN")!=0)
+		error("} missing");
+	get_token();
+	if(strcmp(currentToken,"ELIF_TOKEN")==0){
+		condition();
+		if(strcmp(currentToken,"CBO_TOKEN")!=0)
+			error("{ missing");
+		get_token();
+		Insts();
+		if(strcmp(currentToken,"CBF_TOKEN")!=0)
+			error("} missing");
+		get_token();
+	}
+	if(strcmp(currentToken,"ELSE_TOKEN")==0){
+		get_token();
+		if(strcmp(currentToken,"CBO_TOKEN")!=0)
+			error("{ missing");
+		get_token();
+		Insts();
+		if(strcmp(currentToken,"CBF_TOKEN")!=0)
+			error("} missing");
+		get_token();
 	}
 }
 //EXPR::=TERM { [+|-] TERM } || callFunction || value
