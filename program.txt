@@ -21,7 +21,7 @@ function2(a,b){
         For i in (1,b){
            a= a + 5;
         }
-    }while(a<=100)
+    }while(a<=100);
     return a;
 }
 Main(): 
