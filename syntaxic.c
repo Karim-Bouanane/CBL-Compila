@@ -88,6 +88,7 @@ void constants(){
 		get_token();
 		if(strcmp(currentToken,"AFF_TOKEN")!=0)
 			error("AFF_token error");
+		get_token();
 		is_value();
 		//is_value reads next token too 
 		if(strcmp(currentToken,"PV_TOKEN")!=0)
@@ -100,6 +101,7 @@ void variables(){
 	while(strcmp(currentToken,"ID_TOKEN")==0){
 		get_token();
 		if(strcmp(currentToken,"AFF_TOKEN")==0){
+			get_token();
 			is_value();
 		}
 		if(strcmp(currentToken,"PV_TOKEN")==0){
@@ -154,48 +156,57 @@ void functions(){
 //------------INSTS-----------
 void Insts(){
   while(Inst());
-  get_token();
 }
 //-----------INST------------
 bool Inst(){
-	if (strcmp(currentToken,"IDF_TOKEN")==0){
-		CallFunction();
-	}else if (strcmp(currentToken,"Return_TOKEN")==0){
-		is_value();
+	if (strcmp(currentToken,"ID_TOKEN")==0){
+		get_token();
+		if (strcmp(currentToken,"AFF_TOKEN")==0)
+			expr();
+		else if (strcmp(currentToken,"PO_TOKEN")==0)
+			CallFunction();
+		else error("inst not clear");
+		if(strcmp(currentToken,"PV_TOKEN")!=0)
+			error("pv missing");
+		get_token();
+	}else if (strcmp(currentToken,"RETURN_TOKEN")==0){
+		get_token();
+		if (strcmp(currentToken,"ID_TOKEN")!=0)
+			is_value();
+		else get_token();
+		if(strcmp(currentToken,"PV_TOKEN")!=0)
+			error("pv missing");
+		get_token();
 	}else if(strcmp(currentToken,"IF_TOKEN")==0){
 		//decision();
 	}else if(strcmp(currentToken,"FOR_TOKEN")==0 || strcmp(currentToken,"DO_TOKEN")==0
 		|| strcmp(currentToken,"WHILE_TOKEN")==0){
 		loop();
+		get_token();
 	}else return FALSE;
     
 	return TRUE;
 }
-//-----------CALLFUNCTION--------
+//-----------CALLFUNCTION-------- start by PO_token already read
 void CallFunction(){
+	if (strcmp(currentToken,"PO_TOKEN")==0){
 		get_token();
-		if (strcmp(currentToken,"PO_TOKEN")==0){
+		if(strcmp(currentToken,"ID_TOKEN")==0){
 			get_token();
-			if(strcmp(currentToken,"ID_TOKEN")==0){
+			while((strcmp(currentToken,"VIR_TOKEN")==0)){
 				get_token();
-				while((strcmp(currentToken,"VIR_TOKEN")==0)){
-					get_token();
-					if(strcmp(currentToken,"ID_TOKEN")!=0)
-						error("id missing");
-					get_token();
-				}
+				if(strcmp(currentToken,"ID_TOKEN")!=0)
+					error("id missing");
+				get_token();
 			}
 		}
-		else error("PO missing");
-		if (strcmp(currentToken,"PF_TOKEN")!=0)
-			error("PF missing");
-		get_token();
-		if(strcmp(currentToken,"PV_TOKEN")==0){
-			get_token();
-			//continue;
-		}
-				
 	}
+	else error("PO missing");
+	if (strcmp(currentToken,"PF_TOKEN")!=0)
+		error("PF missing");
+	get_token();
+}
+
 
 //-------MAIN--------------------	
 void Main(){
@@ -295,25 +306,48 @@ void loop(){
 		Insts();
 		//get_token();
 		if(strcmp(currentToken,"CBF_TOKEN")!=0)
-			error("loop");
+			error("looph");
 		get_token();
 		if(strcmp(currentToken,"WHILE_TOKEN")!=0)
-			error("loop");
+			error("loophh");
 		condition();
 		if(strcmp(currentToken,"PV_TOKEN")!=0)
-			error("loop");
+			error("loophhh");
 	}
 }
 //EXPR::=TERM { [+|-] TERM } || callFunction || value
 void expr(){
 	get_token();
-	//callFunction();
-	do{
-		term();
-	}while((strcmp(currentToken,"PLUS_TOKEN")==0) || (strcmp(currentToken,"MOINS_TOKEN")==0));
-	is_value();
+	if (strcmp(currentToken,"ID_TOKEN")==0){
+		get_token();
+		if (strcmp(currentToken,"PO_TOKEN")==0)
+			CallFunction();
+		else exprBegin();
+	}
+	else if(strcmp(currentToken,"NUM_TOKEN")==0){
+		get_token();
+		exprBegin();
+	}
+	else if(strcmp(currentToken,"PO_TOKEN")==0){
+		expr();
+		if(strcmp(currentToken,"PF_TOKEN")!=0)
+			error("expression error");
+		get_token();
+		exprBegin();
+	}
+	else is_value();
 }
 //TERM::=FACT {[*|/|^|%] FACT}
+void exprBegin(){
+	while((strcmp(currentToken,"MULT_TOKEN")==0) || (strcmp(currentToken,"DIV_TOKEN")==0) 
+				|| (strcmp(currentToken,"POWER_TOKEN")==0) || (strcmp(currentToken,"MOD_TOKEN")==0)){
+		fact();
+		get_token();
+	}
+	while((strcmp(currentToken,"PLUS_TOKEN")==0) || (strcmp(currentToken,"MOINS_TOKEN")==0)){
+		term();
+	}
+}
 void term(){
 	do{
 		fact();
@@ -337,7 +371,6 @@ void fact(){
 	else error("expression");
 }
 void is_value(){
-	get_token();
 	//numbers 
 	if(strcmp(currentToken,"NUM_TOKEN")==0){
 		get_token();

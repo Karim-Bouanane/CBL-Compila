@@ -26,6 +26,7 @@ void condition();
 void decision();
 void loop();
 void expr();
+void exprBegin();
 void term();
 void fact();
 
