@@ -62,6 +62,7 @@ void program(){
 	}
 	if(strcmp(currentToken,"MAIN_TOKEN")==0){
 		Main();
+		return;
 	}
 	else error("bloc main missing");
 }
@@ -193,7 +194,7 @@ bool Inst(){
 //------------------LIST------
 void list(){
 	get_token();
-	if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
+	if(strcmp(currentToken,"INT_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 		get_token();
 		if(strcmp(currentToken,"BF_TOKEN")!=0);
 			error("BF_TOKEN missing");
@@ -282,13 +283,13 @@ void loop(){
 		get_token();
 		if(strcmp(currentToken,"PO_TOKEN")==0){
 			get_token();
-			if(strcmp(currentToken,"NUM_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
+			if(strcmp(currentToken,"INT_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
 				error("loop");
 			get_token();
 			if(strcmp(currentToken,"VIR_TOKEN")!=0)
 				error("loop");
 			get_token();
-			if(strcmp(currentToken,"NUM_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
+			if(strcmp(currentToken,"INT_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
 				error("loop");
 			get_token();
 			if(strcmp(currentToken,"PF_TOKEN")!=0)
@@ -369,7 +370,7 @@ void expr(){
 			CallFunction();
 		}else if(strcmp(currentToken,"BO_TOKEN")==0){
 			get_token();
-			if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
+			if(strcmp(currentToken,"INT_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 				get_token();
 				if(strcmp(currentToken,"BF_TOKEN")!=0);
 					error("BF_TOKEN missing");
@@ -377,7 +378,7 @@ void expr(){
 			}else error("indice missing");
 		}else exprBegin();
 	
-	}else if(strcmp(currentToken,"NUM_TOKEN")==0){
+	}else if(is_num()){
 		get_token();
 		exprBegin();
 	}
@@ -403,34 +404,44 @@ void exprBegin(){
 void term(){
 	do{
 		fact();
-		get_token();
 	}while((strcmp(currentToken,"MULT_TOKEN")==0) || (strcmp(currentToken,"DIV_TOKEN")==0) 
 		|| (strcmp(currentToken,"POWER_TOKEN")==0) || (strcmp(currentToken,"MOD_TOKEN")==0));
 }
 //FACT::=ID | NUM | (EXPR)
 void fact(){
 	get_token();
-	if(strcmp(currentToken,"ID_TOKEN")==0)
+	if(strcmp(currentToken,"ID_TOKEN")==0){
+		get_token();
+		if (strcmp(currentToken,"PO_TOKEN")==0){
+			CallFunction();
+		}else if(strcmp(currentToken,"BO_TOKEN")==0){
+			get_token();
+			if(strcmp(currentToken,"INT_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
+				get_token();
+				if(strcmp(currentToken,"BF_TOKEN")!=0);
+					error("BF_TOKEN missing");
+				get_token();
+			}else error("indice missing");
+		}
 		return;
+	}
 	else if(strcmp(currentToken,"PO_TOKEN")==0){
 		expr();
 		if(strcmp(currentToken,"PF_TOKEN")!=0)
 			error("expression error");
+		get_token();
 		return;
 	}
-	else if(strcmp(currentToken,"NUM_TOKEN")==0)
+	else if(is_num()){
+		get_token();
 		return;
+	}
 	else error("expression");
 }
 void is_value(){
 	//numbers 
-	if(strcmp(currentToken,"NUM_TOKEN")==0){
+	if(is_num() || strcmp(currentToken,"CHAR_TOKEN")==0){
 		get_token();
-		if(strcmp(currentToken,"VIR_TOKEN")==0){
-			get_token();
-			if(strcmp(currentToken,"NUM_TOKEN")!=0)
-				error("NUM_token error");
-		}
 	}
 	//strings
 	else if(strcmp(currentToken,"ST_TOKEN")==0){
@@ -480,10 +491,16 @@ void is_value(){
 		}
 		else error("accesstype missing");
 		get_token();
-
-
 	}
 	else error("unknown type of values");
+}
+bool is_num(){
+	for (int i =0; i<4; i++){
+		if(strcmp(currentToken,Num_tokens[i])==0){
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 bool accesstype(){
 	get_token();
