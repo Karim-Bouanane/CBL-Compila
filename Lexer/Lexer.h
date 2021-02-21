@@ -73,9 +73,9 @@ const char *dataType_tokens[] =
 
 /* Tokens des conditions et des boucles */
 const char *conditionloop_tokensName[] =
-    {"IF", "ELIF", "WHILE", "DO", "FOR", "IN"};
+    {"IF", "ELIF", "ELSE", "WHILE", "DO", "FOR", "IN"};
 const char *conditionloop_tokens[] =
-    {"if", "elif", "while", "do", "for", "in"};
+    {"if", "elif", "else", "while", "do", "for", "in"};
 
 // Size of dataType_tokens list
 #define SIZE_ELEMENT_CONDITIONLOOP 6
