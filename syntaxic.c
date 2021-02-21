@@ -165,8 +165,6 @@ bool Inst(){
 			expr();
 		else if (strcmp(currentToken,"PO_TOKEN")==0)
 			CallFunction();
-		else if (strcmp(currentToken,"BO_TOKEN")==0)
-			list();
 		else error("inst not clear");
 		if(strcmp(currentToken,"PV_TOKEN")!=0)
 			error("pv missing");
@@ -184,22 +182,10 @@ bool Inst(){
 	}else if(strcmp(currentToken,"FOR_TOKEN")==0 || strcmp(currentToken,"DO_TOKEN")==0
 		|| strcmp(currentToken,"WHILE_TOKEN")==0){
 		loop();
-		get_token();		
+		get_token();
 	}else return FALSE;
     
 	return TRUE;
-}
-//------------------LIST------
-void list(){
-	get_token();
-	if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
-		get_token();
-		if(strcmp(currentToken,"BF_TOKEN")!=0);
-			error("BF_TOKEN missing");
-		if(strcmp(currentToken,"AFF_TOKEN")!=0)
-			expr();
-		else  error("AFF_TOKEN missing");
-	}else error("indice missing");
 }
 
 //-----------CALLFUNCTION-------- start by PO_token already read
@@ -368,8 +354,21 @@ void expr(){
 		if (strcmp(currentToken,"PO_TOKEN")==0)
 			CallFunction();
 		else exprBegin();
-	}
-	else if(strcmp(currentToken,"NUM_TOKEN")==0){
+	}else if(strcmp(currentToken,"LIST_TOKEN")==0)){
+		get_token();
+		if(strcmp(currentToken,"BO_TOKEN")!=0)
+			error("BO missing");
+		get_token();
+		if(strcmp(currentToken,"NUM_TOKEN")==0){
+			get_token();
+			if(strcmp(currentToken,"BF_TOKEN")!=0);
+				error("BF_TOKEN missing");
+			if(strcmp(currentToken,"AFF_TOKEN")==0);
+				is_value();
+			else  error("AFF_TOKEN missing");
+		}else error("indice missing");
+	
+	}else if(strcmp(currentToken,"NUM_TOKEN")==0){
 		get_token();
 		exprBegin();
 	}
@@ -379,8 +378,7 @@ void expr(){
 			error("expression error");
 		get_token();
 		exprBegin();
-	}
-	else is_value();
+	}else is_value();
 }
 //TERM::=FACT {[*|/|^|%] FACT}
 void exprBegin(){
@@ -432,24 +430,23 @@ void is_value(){
 			get_token();
 		get_token();
 	}
-	//list can have ID or values
+	//list
 	else if(strcmp(currentToken,"LIST_TOKEN")==0){
 		get_token();
 		if(strcmp(currentToken,"INF_TOKEN")!=0)
 			error("INF_token error");
-		do{
+		get_token();
+		while(strcmp(currentToken,"ID_TOKEN")==0){
 			get_token();
-			if(strcmp(currentToken,"ID_TOKEN")==0){
+			if(strcmp(currentToken,"VIR_TOKEN")==0){
 				get_token();
 				continue;
 			}
-			else if(strcmp(currentToken,"SUP_TOKEN")==0)
+			else if(strcmp(currentToken,"SUP_TOKEN")==0){
+				get_token();
 				break;
-			else is_value();
-		}while(strcmp(currentToken,"VIR_TOKEN")==0);
-		if(strcmp(currentToken,"SUP_TOKEN")!=0)
-			error("list declaration un recognized");
-		get_token();
+			}
+		}
 	}
 	//FILE
 	else if(strcmp(currentToken,"FILE_TOKEN")==0){
@@ -467,24 +464,11 @@ void is_value(){
 		if(strcmp(currentToken,"VIR_TOKEN")!=0)
 			error("VIR_token error");
 		//accesstype
-		if(accesstype()){
-			get_token();
-			if(strcmp(currentToken,"PF_token")!=0)
-				error("PF_token error");
-		}
-		else error("accesstype missing");
 		get_token();
 
 
 	}
 	else error("unknown type of values");
-}
-bool accesstype(){
-	get_token();
-	if(strcmp(currentToken,"R_TOKEN")==0 || strcmp(currentToken,"W_TOKEN")==0){
-		return TRUE;
-	}
-	return FALSE;
 }
 void main(){
 	tokens_file = fopen("C:\\Users\\HP\\Desktop\\compila\\tokens.txt", "r");
