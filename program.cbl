@@ -11,7 +11,7 @@ com: tester tous les types de variables;
     x = 4; 
     y = 0.5F;
     z = "Hello";
-    w = 0.4D;
+    w = list< 5, 5.6D, x, 's'>;
     c = 'a';
     ll = 410L;
     constfichier = FILE("C:/users/hp/dektop/fie.txt",'r'); 
@@ -69,7 +69,7 @@ com: test des opérateurs logique;
 
 com: test de la condition if() elif() else;
     if ( i == 4){
-        x = x + x;
+        x = x + w[1];
     }elif( i > 4){
         x = (x - x)%a;
     }
@@ -83,12 +83,12 @@ com: test des boucles while() et do while();
     }
 
     do {
-
+    	w[i]= x % i;
     }while(i !=4);
 
 com: test de la boucle for i in (1,n) ;
     for i in (1, 10){
-
+    	a = w[i];
     }
     for j in (1, x){
     	function3(j, x);
