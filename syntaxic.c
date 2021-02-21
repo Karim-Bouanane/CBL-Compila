@@ -165,6 +165,8 @@ bool Inst(){
 			expr();
 		else if (strcmp(currentToken,"PO_TOKEN")==0)
 			CallFunction();
+		else if (strcmp(currentToken,"BO_TOKEN")==0)
+			list();
 		else error("inst not clear");
 		if(strcmp(currentToken,"PV_TOKEN")!=0)
 			error("pv missing");
@@ -188,6 +190,18 @@ bool Inst(){
 	return TRUE;
 }
 
+//------------------LIST------
+void list(){
+	get_token();
+	if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
+		get_token();
+		if(strcmp(currentToken,"BF_TOKEN")!=0);
+			error("BF_TOKEN missing");
+		if(strcmp(currentToken,"AFF_TOKEN")!=0)
+			expr();
+		else  error("AFF_TOKEN missing");
+	}else error("indice missing");
+}
 //-----------CALLFUNCTION-------- start by PO_token already read
 void CallFunction(){
 	if (strcmp(currentToken,"PO_TOKEN")==0){
