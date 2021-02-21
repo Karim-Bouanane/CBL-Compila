@@ -367,19 +367,15 @@ void expr(){
 		get_token();
 		if (strcmp(currentToken,"PO_TOKEN")==0){
 			CallFunction();
-		}else exprBegin();
-		if(strcmp(currentToken,"BO_TOKEN")==0){
+		}else if(strcmp(currentToken,"BO_TOKEN")==0){
 			get_token();
 			if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 				get_token();
 				if(strcmp(currentToken,"BF_TOKEN")!=0);
 					error("BF_TOKEN missing");
 				get_token();
-				if(strcmp(currentToken,"AFF_TOKEN")==0);
-					is_value();
-				else  error("AFF_TOKEN missing");
 			}else error("indice missing");
-		}
+		}else exprBegin();
 	
 	}else if(strcmp(currentToken,"NUM_TOKEN")==0){
 		get_token();
