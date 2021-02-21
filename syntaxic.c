@@ -464,11 +464,24 @@ void is_value(){
 		if(strcmp(currentToken,"VIR_TOKEN")!=0)
 			error("VIR_token error");
 		//accesstype
+		if(accesstype()){
+			get_token();
+			if(strcmp(currentToken,"PF_token")!=0)
+				error("PF_token error");
+		}
+		else error("accesstype missing");
 		get_token();
 
 
 	}
 	else error("unknown type of values");
+}
+bool accesstype(){
+	get_token();
+	if(strcmp(currentToken,"R_TOKEN")==0 || strcmp(currentToken,"W_TOKEN")==0){
+		return TRUE;
+	}
+	return FALSE;
 }
 void main(){
 	tokens_file = fopen("C:\\Users\\HP\\Desktop\\compila\\tokens.txt", "r");
