@@ -183,10 +183,29 @@ bool Inst(){
 		|| strcmp(currentToken,"WHILE_TOKEN")==0){
 		loop();
 		get_token();
+	}else if (strcmp(currentToken,"LIST_TOKEN")==0){
+		get_token();
+		if (strcmp(currentToken,"PO_TOKEN")==0)
+			LIST();
+		        get_token();
+		
 	}else return FALSE;
     
 	return TRUE;
 }
+//------------------LIST------
+void List(){
+	get_token();
+	if(strcmp(currentToken,"NUM_TOKEN")){
+		get_token();
+		if(strcmp(currentToken,"PF_TOKEN")!=0);
+			error("PF_TOKEN missing");
+		if(strcmp(currentToken,"AFF_TOKEN")!=0);
+			is_value();
+		else  error("AFF_TOKEN missing")
+	}else error("indice missing");
+}
+
 //-----------CALLFUNCTION-------- start by PO_token already read
 void CallFunction(){
 	if (strcmp(currentToken,"PO_TOKEN")==0){
