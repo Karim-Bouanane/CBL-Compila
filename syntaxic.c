@@ -165,6 +165,8 @@ bool Inst(){
 			expr();
 		else if (strcmp(currentToken,"PO_TOKEN")==0)
 			CallFunction();
+		else if (strcmp(currentToken,"BO_TOKEN")==0)
+			list();
 		else error("inst not clear");
 		if(strcmp(currentToken,"PV_TOKEN")!=0)
 			error("pv missing");
@@ -182,27 +184,21 @@ bool Inst(){
 	}else if(strcmp(currentToken,"FOR_TOKEN")==0 || strcmp(currentToken,"DO_TOKEN")==0
 		|| strcmp(currentToken,"WHILE_TOKEN")==0){
 		loop();
-		get_token();
-	}else if (strcmp(currentToken,"LIST_TOKEN")==0){
-		get_token();
-		if (strcmp(currentToken,"PO_TOKEN")==0)
-			LIST();
-		        get_token();
-		
+		get_token();		
 	}else return FALSE;
     
 	return TRUE;
 }
 //------------------LIST------
-void List(){
+void list(){
 	get_token();
-	if(strcmp(currentToken,"NUM_TOKEN")){
+	if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 		get_token();
-		if(strcmp(currentToken,"PF_TOKEN")!=0);
-			error("PF_TOKEN missing");
-		if(strcmp(currentToken,"AFF_TOKEN")!=0);
-			is_value();
-		else  error("AFF_TOKEN missing")
+		if(strcmp(currentToken,"BF_TOKEN")!=0);
+			error("BF_TOKEN missing");
+		if(strcmp(currentToken,"AFF_TOKEN")!=0)
+			expr();
+		else  error("AFF_TOKEN missing");
 	}else error("indice missing");
 }
 
@@ -436,23 +432,24 @@ void is_value(){
 			get_token();
 		get_token();
 	}
-	//list
+	//list can have ID or values
 	else if(strcmp(currentToken,"LIST_TOKEN")==0){
 		get_token();
 		if(strcmp(currentToken,"INF_TOKEN")!=0)
 			error("INF_token error");
-		get_token();
-		while(strcmp(currentToken,"ID_TOKEN")==0){
+		do{
 			get_token();
-			if(strcmp(currentToken,"VIR_TOKEN")==0){
+			if(strcmp(currentToken,"ID_TOKEN")==0){
 				get_token();
 				continue;
 			}
-			else if(strcmp(currentToken,"SUP_TOKEN")==0){
-				get_token();
+			else if(strcmp(currentToken,"SUP_TOKEN")==0)
 				break;
-			}
-		}
+			else is_value();
+		}while(strcmp(currentToken,"VIR_TOKEN")==0);
+		if(strcmp(currentToken,"SUP_TOKEN")!=0)
+			error("list declaration un recognized");
+		get_token();
 	}
 	//FILE
 	else if(strcmp(currentToken,"FILE_TOKEN")==0){
