@@ -58,7 +58,10 @@ void program(){
 		get_token();
 		if(strcmp(currentToken,"DP_TOKEN")!=0)
 			error("DP_token error");
-		functions();
+		get_token();
+		do{
+			functions();
+		}while(strcmp(currentToken,"ID_TOKEN")==0);
 	}
 	if(strcmp(currentToken,"MAIN_TOKEN")==0){
 		Main();
@@ -114,7 +117,6 @@ void variables(){
 }
 //-------FUNC--------------------
 void functions(){
-	get_token();
 	if(strcmp(currentToken,"ID_TOKEN")!=0)
 		error("id missing");
 	get_token();
@@ -131,7 +133,7 @@ void functions(){
 		}
 	}
 	if(strcmp(currentToken,"PF_TOKEN")!=0)
-		error("PO missing");
+		error("PF missing");
 	get_token();
 	if((strcmp(currentToken,"CBO_TOKEN")!=0))
 		error("CBO missing");
@@ -395,7 +397,6 @@ void exprBegin(){
 	while((strcmp(currentToken,"MULT_TOKEN")==0) || (strcmp(currentToken,"DIV_TOKEN")==0) 
 				|| (strcmp(currentToken,"POWER_TOKEN")==0) || (strcmp(currentToken,"MOD_TOKEN")==0)){
 		fact();
-		get_token();
 	}
 	while((strcmp(currentToken,"PLUS_TOKEN")==0) || (strcmp(currentToken,"MOINS_TOKEN")==0)){
 		term();
