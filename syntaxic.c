@@ -283,13 +283,13 @@ void loop(){
 		get_token();
 		if(strcmp(currentToken,"PO_TOKEN")==0){
 			get_token();
-			if(strcmp(currentToken,"INT_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
+			if(strcmp(currentToken,"INT_TOKEN")!=0 && strcmp(currentToken,"LONG_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
 				error("loop");
 			get_token();
 			if(strcmp(currentToken,"VIR_TOKEN")!=0)
 				error("loop");
 			get_token();
-			if(strcmp(currentToken,"INT_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
+			if(strcmp(currentToken,"INT_TOKEN")!=0 && strcmp(currentToken,"LONG_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
 				error("loop");
 			get_token();
 			if(strcmp(currentToken,"PF_TOKEN")!=0)
@@ -370,7 +370,7 @@ void expr(){
 			CallFunction();
 		}else if(strcmp(currentToken,"BO_TOKEN")==0){
 			get_token();
-			if(strcmp(currentToken,"INT_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
+			if(strcmp(currentToken,"INT_TOKEN")==0 || strcmp(currentToken,"LONG_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 				get_token();
 				if(strcmp(currentToken,"BF_TOKEN")!=0);
 					error("BF_TOKEN missing");
@@ -416,7 +416,7 @@ void fact(){
 			CallFunction();
 		}else if(strcmp(currentToken,"BO_TOKEN")==0){
 			get_token();
-			if(strcmp(currentToken,"INT_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
+			if(strcmp(currentToken,"INT_TOKEN")==0 || strcmp(currentToken,"LONG_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 				get_token();
 				if(strcmp(currentToken,"BF_TOKEN")!=0);
 					error("BF_TOKEN missing");
