@@ -4,6 +4,7 @@
 
 #include <ctype.h>
 #include <string.h>
+#include <stdio.h>
 
 /***** Définition ******/
 
@@ -14,10 +15,10 @@
 
 /***** Déclaration des Variables Globales ******/
 
+char currentWord[MAXCHAR_WORD];
+int sizeofCurrentWord;
 int firstTokenChar;
 char currentChar;
-char currentWord[MAXCHAR_WORD];
-int sizeofCurrentWord = 0;
 
 FILE *program;
 FILE *lex;
@@ -37,6 +38,7 @@ void saveToken(const char *token);
 void ignoreWhiteSpaces();
 void ignoreComment();
 void getCurrentWord();
+
 bool search_for_token(const char *word, const char **list, const char **listName, int size_of_list);
 bool isBloc();
 bool isReturn();
@@ -53,9 +55,9 @@ bool isSpecialSymb();
 
 /* Tokens des mots clés de la structure du programme */
 const char *bloc_tokensName[] =
-    {"LIBRARIES", "LIB", "H", "CONST", "VAR", "FUNC", "MAIN"};
+    {"LIBRARIES", "LIB", "H", "CONST", "VAR", "FUNC", "MAIN", "RETURN"};
 const char *bloc_tokens[] =
-    {"Libraries", "lib", "h", "Constants", "Variables", "Functions", "Main"};
+    {"Libraries", "lib", "h", "Constants", "Variables", "Functions", "Main", "return"};
 
 // Size of programStructure_tokens list
 #define SIZE_ELEMENT_BLOC 10
@@ -63,12 +65,12 @@ const char *bloc_tokens[] =
 
 /* Tokens des type de données */
 const char *dataType_tokensName[] =
-    {"INT", "FLOAT", "STRING", "DOUBLE", "CHAR", "LONG", "LIST", "FILE"};
+    {"LIST", "FILE"};
 const char *dataType_tokens[] =
-    {"int", "float", "string", "double", "char", "long", "list", "FILE"};
+    {"list", "FILE"};
 
 // Size of dataType_tokens list
-#define SIZE_ELEMENT_DATATYPE 7
+#define SIZE_ELEMENT_DATATYPE 4
 #define SIZE_TOKENSLIST_DATATYPE sizeof(dataType_tokens) / sizeof(dataType_tokens[0])
 
 /* Tokens des conditions et des boucles */
@@ -77,13 +79,13 @@ const char *conditionloop_tokensName[] =
 const char *conditionloop_tokens[] =
     {"if", "elif", "else", "while", "do", "for", "in"};
 
-// Size of dataType_tokens list
+// Size of conditionLoop_tokens list
 #define SIZE_ELEMENT_CONDITIONLOOP 6
 #define SIZE_TOKENSLIST_CONDITIONLOOP sizeof(conditionloop_tokens) / sizeof(conditionloop_tokens[0])
 
 /* Tokens des opérateurs arithmétique, comparaison, affectation, logique */
 const char *operatorSymb_tokensName[] =
-    {"PLUS", "MOINS", "DIV", "MODULO", "MULT", "POWER", "EG", "DIFF", "INFEG", "INF", "SUPEG", "SUP", "AFF", "AND", "OR"};
+    {"PLUS", "MOINS", "DIV", "MOD", "MULT", "POWER", "EG", "DIFF", "INFEG", "INF", "SUPEG", "SUP", "AFF", "AND", "OR"};
 const char *operatorSymb_tokens[] =
     {"+", "-", "/", "%", "*", "^", "==", "!=", "<=", "<", ">=", ">", "=", "&", "|"};
 
@@ -92,9 +94,9 @@ const char *operatorSymb_tokens[] =
 
 /* Tokens des charactères spéciaux */
 const char *specialSymb_tokensName[] =
-    {"PV", "DP", "VIR", "DASH", "PT", "OPEN_PAR", "CLOSE_PAR", "OPEN_BRACKET", "CLOSE_BRACKET"};
+    {"PV", "DP", "VIR", "PO", "PF", "BO", "BF", "CBO", "CBF"};
 const char *specialSymb_tokens[] =
-    {";", ":", ",", "_", ".", "(", ")", "{", "}"};
+    {";", ":", ",", "(", ")", "[", "]", "{", "}"};
 
 // Size of specialSymb_tokens list
 #define SIZE_TOKENSLIST_SPECIALSYMB sizeof(specialSymb_tokens) / sizeof(specialSymb_tokens[0])

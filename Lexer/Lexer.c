@@ -6,6 +6,81 @@
 
 #include "Lexer.h"
 
+//----- Declarations des variables :
+
+const char *programFile = "test.txt"; // "..\\program.cbl"
+const char *outputLex = "test.lex";   //"..\\program.lex"
+
+/* Main function */
+
+int main()
+{
+    program = fopen(programFile, "r");
+    lex = fopen(outputLex, "a");
+
+    if (program == NULL || lex == NULL)
+    {
+        perror("Error while opening the file");
+        exit(1);
+    }
+
+    do
+    {
+        NextChar();
+
+        ignoreWhiteSpaces();
+        //printf("after whitespaces %c\n", currentChar);
+        firstTokenChar = ftell(program) - 1; // keep the position of first Token character
+        ignoreComment();
+
+        //printf("after Comments %c\n", currentChar);
+
+        if (isalpha(currentChar))
+        {
+            //printf("Case : Alphabet\n");
+            getCurrentWord();
+
+            // if one statement return true, then the condition is verified
+            // without verifying the others
+            if (isBloc() ||
+                isDataType() ||
+                isConditionOrLoop() ||
+                isIdentifier())
+                continue;
+        }
+        else if (isdigit(currentChar))
+        {
+            //printf("Case : Number \n");
+            if (isNumber())
+                continue; // skip the other verification functions
+        }
+        else if (currentChar == '\'')
+        {
+            if (isCharacter())
+                continue;
+        }
+        else if (currentChar == '\"')
+        {
+            if (isString())
+                continue;
+        }
+        else
+        {
+            //printf("Case :Special symb\n");
+            if (isSpecialSymb() ||
+                isOperator())
+                continue;
+        }
+
+        LexError("Invalid Token");
+    } while (currentChar != EOF);
+
+    fclose(program);
+    fclose(lex);
+    printf("\n\n\n\tFin");
+    return 1;
+}
+
 //----- Functions -------------- :
 
 char NextChar()
@@ -15,7 +90,7 @@ char NextChar()
 
 void saveToken(const char *token)
 {
-    printf("-----------------%s_TOKEN\n", token);
+    printf("%s_TOKEN\n", token);
     //fprintf(lex, "%s_TOKEN\n", token);
 }
 
@@ -80,7 +155,7 @@ void ignoreComment()
 
         NextChar(); // ignore ;
 
-        printf("Comment\n");
+        printf("------- Comment\n");
 
         ignoreWhiteSpaces();
         firstTokenChar = ftell(program) - 1; // new Token so we keep track for the first character
@@ -101,7 +176,7 @@ bool isBloc()
 
 bool isDataType()
 {
-    if (sizeofCurrentWord > SIZE_ELEMENT_DATATYPE)
+    if (sizeofCurrentWord != SIZE_ELEMENT_DATATYPE)
         return FALSE;
 
     return search_for_token(currentWord, dataType_tokens, dataType_tokensName, SIZE_TOKENSLIST_DATATYPE);
