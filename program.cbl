@@ -11,10 +11,10 @@ com: tester tous les types de variables;
     x = 4; 
     y = 0.5F;
     z = "Hello";
-    w = 0.4D;
+    w = list< 5, 5.6D, x, 's'>;
     c = 'a';
     ll = 410L;
-    FILE constfichier; 
+    constfichier = FILE("C:/users/hp/dektop/fie.txt",'r'); 
 
 
 Variables :  
@@ -25,7 +25,7 @@ com: tester tous les types de variables;
     d = 0.4D;
     r = 'a';
     l = 410L;
-    FILE varfichier; 
+    varfichier, a; 
  
 
 Functions : 
@@ -69,29 +69,29 @@ com: test des opérateurs logique;
 
 com: test de la condition if() elif() else;
     if ( i == 4){
-        x = x + x;
+        x = x + w[1];
     }elif( i > 4){
-        x = x - x;
+        x = (x - x)%a;
     }
     else {
-
+    	return 4;
     }
 
 com: test des boucles while() et do while();
     while( i == 0){
-
+    	a = function2(i,b);
     }
 
     do {
-
+    	w[i]= x % i;
     }while(i !=4);
 
 com: test de la boucle for i in (1,n) ;
     for i in (1, 10){
-
+    	a = w[i];
     }
     for j in (1, x){
-
+    	function3(j, x);
     }
 
 com: test d'appel de fonctions;
