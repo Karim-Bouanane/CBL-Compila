@@ -361,8 +361,8 @@ void expr(){
 					error("BF_TOKEN missing");
 				get_token();
 			}else error("indice missing");
-		}else exprBegin();
-	
+		}
+		exprBegin();
 	}else if(strcmp(currentToken,"NUM_TOKEN")==0){
 		get_token();
 		exprBegin();
