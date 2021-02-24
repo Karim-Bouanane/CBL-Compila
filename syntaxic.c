@@ -98,7 +98,7 @@ void variables(){
 			get_token();
 			is_value();
 		}
-		if(strcmp(currentToken,"PV_TOKEN")==0){
+		if(strcmp(currentToken,"PV_TOKEN")==0 || strcmp(currentToken,"VIR_TOKEN")==0){
 			get_token();
 			continue;
 		}
@@ -184,9 +184,10 @@ void list(){
 	get_token();
 	if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 		get_token();
-		if(strcmp(currentToken,"BF_TOKEN")!=0);
+		if(strcmp(currentToken,"BF_TOKEN")!=0)
 			error("BF_TOKEN missing");
-		if(strcmp(currentToken,"AFF_TOKEN")!=0)
+		get_token();
+		if(strcmp(currentToken,"AFF_TOKEN")==0)
 			expr();
 		else  error("AFF_TOKEN missing");
 	}else error("indice missing");
@@ -356,7 +357,7 @@ void expr(){
 			get_token();
 			if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 				get_token();
-				if(strcmp(currentToken,"BF_TOKEN")!=0);
+				if(strcmp(currentToken,"BF_TOKEN")!=0)
 					error("BF_TOKEN missing");
 				get_token();
 			}else error("indice missing");
@@ -400,7 +401,7 @@ void fact(){
 			get_token();
 			if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 				get_token();
-				if(strcmp(currentToken,"BF_TOKEN")!=0);
+				if(strcmp(currentToken,"BF_TOKEN")!=0)
 					error("BF_TOKEN missing");
 				get_token();
 			}else error("indice missing");
@@ -433,14 +434,15 @@ void is_value(){
 		get_token();
 		if(strcmp(currentToken,"INF_TOKEN")!=0)
 			error("INF_token error");
-		get_token();
 		do{
+			get_token();
 			if(strcmp(currentToken,"ID_TOKEN")==0)
 				get_token();
 			else is_value();
 		}while(strcmp(currentToken,"VIR_TOKEN")==0);
 		if(strcmp(currentToken,"SUP_TOKEN")!=0)
 			error("list syntax");
+		get_token();
 	}
 	//FILE
 	else if(strcmp(currentToken,"FILE_TOKEN")==0){
@@ -455,10 +457,11 @@ void is_value(){
 		if(strcmp(currentToken,"VIR_TOKEN")!=0)
 			error("VIR_token error");
 		//accesstype
+		get_token();
 		if(strcmp(currentToken,"CHAR_TOKEN")!=0)
 			error("accesstype missing");
 		get_token();
-		if(strcmp(currentToken,"PF_token")!=0)
+		if(strcmp(currentToken,"PF_TOKEN")!=0)
 			error("PF_token error");
 		get_token();
 	}else error("unknown type of values");
