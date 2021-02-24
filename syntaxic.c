@@ -18,16 +18,6 @@ void get_token(){
 	currentToken = (char *)malloc(i+1);
 	strcpy(currentToken, tmp);
 	printf("%s \n",currentToken);
-	if(strcmp(currentToken,"COM_TOKEN")==0)
-		comment();
-}
-void comment(){
-	get_token();
-	if(strcmp(currentToken,"DP_TOKEN")!=0)
-		error("DP_token error");
-	while(strcmp(currentToken,"PV_TOKEN")!=0)
-		get_token();
-	get_token();
 }
 void error(char* message){
 	printf("syntax error %s",message);
@@ -175,10 +165,7 @@ bool Inst(){
 			error("pv missing");
 		get_token();
 	}else if (strcmp(currentToken,"RETURN_TOKEN")==0){
-		get_token();
-		if (strcmp(currentToken,"ID_TOKEN")!=0)
-			is_value();
-		else get_token();
+		expr();
 		if(strcmp(currentToken,"PV_TOKEN")!=0)
 			error("pv missing");
 		get_token();
@@ -189,14 +176,13 @@ bool Inst(){
 		loop();
 		get_token();
 	}else return FALSE;
-    
 	return TRUE;
 }
 
 //------------------LIST------
 void list(){
 	get_token();
-	if(strcmp(currentToken,"INT_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
+	if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 		get_token();
 		if(strcmp(currentToken,"BF_TOKEN")!=0);
 			error("BF_TOKEN missing");
@@ -218,14 +204,11 @@ void CallFunction(){
 				get_token();
 			}
 		}
-	}
-	else error("PO missing");
+	}else error("PO missing");
 	if (strcmp(currentToken,"PF_TOKEN")!=0)
 		error("PF missing");
 	get_token();
 }
-
-
 //-------MAIN--------------------	
 void Main(){
 	get_token();
@@ -237,8 +220,7 @@ void Main(){
 		if(strcmp(currentToken,"PV_TOKEN")==0){
 			get_token();
 			continue;
-		}
-		else break;
+		}else break;
 	}
 	if(strcmp(currentToken,"PF_TOKEN")!=0)
 		error("main error");
@@ -285,13 +267,13 @@ void loop(){
 		get_token();
 		if(strcmp(currentToken,"PO_TOKEN")==0){
 			get_token();
-			if(strcmp(currentToken,"INT_TOKEN")!=0 && strcmp(currentToken,"LONG_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
+			if(strcmp(currentToken,"NUM_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
 				error("loop");
 			get_token();
 			if(strcmp(currentToken,"VIR_TOKEN")!=0)
 				error("loop");
 			get_token();
-			if(strcmp(currentToken,"INT_TOKEN")!=0 && strcmp(currentToken,"LONG_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
+			if(strcmp(currentToken,"NUM_TOKEN")!=0 && strcmp(currentToken,"ID_TOKEN")!=0)
 				error("loop");
 			get_token();
 			if(strcmp(currentToken,"PF_TOKEN")!=0)
@@ -324,13 +306,13 @@ void loop(){
 		Insts();
 		//get_token();
 		if(strcmp(currentToken,"CBF_TOKEN")!=0)
-			error("looph");
+			error("loop");
 		get_token();
 		if(strcmp(currentToken,"WHILE_TOKEN")!=0)
-			error("loophh");
+			error("loop");
 		condition();
 		if(strcmp(currentToken,"PV_TOKEN")!=0)
-			error("loophhh");
+			error("loop");
 	}
 }
 void decision(){
@@ -372,7 +354,7 @@ void expr(){
 			CallFunction();
 		}else if(strcmp(currentToken,"BO_TOKEN")==0){
 			get_token();
-			if(strcmp(currentToken,"INT_TOKEN")==0 || strcmp(currentToken,"LONG_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
+			if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 				get_token();
 				if(strcmp(currentToken,"BF_TOKEN")!=0);
 					error("BF_TOKEN missing");
@@ -380,11 +362,10 @@ void expr(){
 			}else error("indice missing");
 		}else exprBegin();
 	
-	}else if(is_num()){
+	}else if(strcmp(currentToken,"NUM_TOKEN")==0){
 		get_token();
 		exprBegin();
-	}
-	else if(strcmp(currentToken,"PO_TOKEN")==0){
+	}else if(strcmp(currentToken,"PO_TOKEN")==0){
 		expr();
 		if(strcmp(currentToken,"PF_TOKEN")!=0)
 			error("expression error");
@@ -417,7 +398,7 @@ void fact(){
 			CallFunction();
 		}else if(strcmp(currentToken,"BO_TOKEN")==0){
 			get_token();
-			if(strcmp(currentToken,"INT_TOKEN")==0 || strcmp(currentToken,"LONG_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
+			if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"ID_TOKEN")==0){
 				get_token();
 				if(strcmp(currentToken,"BF_TOKEN")!=0);
 					error("BF_TOKEN missing");
@@ -433,22 +414,18 @@ void fact(){
 		get_token();
 		return;
 	}
-	else if(is_num()){
+	else if(strcmp(currentToken,"NUM_TOKEN")==0){
 		get_token();
 		return;
-	}
-	else error("expression");
+	}else error("expression");
 }
 void is_value(){
-	//numbers 
-	if(is_num() || strcmp(currentToken,"CHAR_TOKEN")==0){
+	//numbers and char
+	if(strcmp(currentToken,"NUM_TOKEN")==0 || strcmp(currentToken,"CHAR_TOKEN")==0){
 		get_token();
 	}
 	//strings
-	else if(strcmp(currentToken,"ST_TOKEN")==0){
-		get_token();
-		while (strcmp(currentToken,"ST_TOKEN")!=0)
-			get_token();
+	else if(strcmp(currentToken,"STRING_TOKEN")==0){
 		get_token();
 	}
 	//list
@@ -457,17 +434,13 @@ void is_value(){
 		if(strcmp(currentToken,"INF_TOKEN")!=0)
 			error("INF_token error");
 		get_token();
-		while(strcmp(currentToken,"ID_TOKEN")==0){
-			get_token();
-			if(strcmp(currentToken,"VIR_TOKEN")==0){
+		do{
+			if(strcmp(currentToken,"ID_TOKEN")==0)
 				get_token();
-				continue;
-			}
-			else if(strcmp(currentToken,"SUP_TOKEN")==0){
-				get_token();
-				break;
-			}
-		}
+			else is_value();
+		}while(strcmp(currentToken,"VIR_TOKEN")==0);
+		if(strcmp(currentToken,"SUP_TOKEN")!=0)
+			error("list syntax");
 	}
 	//FILE
 	else if(strcmp(currentToken,"FILE_TOKEN")==0){
@@ -476,39 +449,19 @@ void is_value(){
 			error("PO_token error");
 		//strings
 		get_token();
-		if(strcmp(currentToken,"ST_TOKEN")==0){
-			get_token();
-			while (strcmp(currentToken,"ST_TOKEN")!=0)
-				get_token();
-		}
+		if(strcmp(currentToken,"STRING_TOKEN")!=0)
+			error("file directory missing");
 		get_token();
 		if(strcmp(currentToken,"VIR_TOKEN")!=0)
 			error("VIR_token error");
 		//accesstype
-		if(accesstype()){
-			get_token();
-			if(strcmp(currentToken,"PF_token")!=0)
-				error("PF_token error");
-		}
-		else error("accesstype missing");
+		if(strcmp(currentToken,"CHAR_TOKEN")!=0)
+			error("accesstype missing");
 		get_token();
-	}
-	else error("unknown type of values");
-}
-bool is_num(){
-	for (int i =0; i<4; i++){
-		if(strcmp(currentToken,Num_tokens[i])==0){
-			return TRUE;
-		}
-	}
-	return FALSE;
-}
-bool accesstype(){
-	get_token();
-	if(strcmp(currentToken,"R_TOKEN")==0 || strcmp(currentToken,"W_TOKEN")==0){
-		return TRUE;
-	}
-	return FALSE;
+		if(strcmp(currentToken,"PF_token")!=0)
+			error("PF_token error");
+		get_token();
+	}else error("unknown type of values");
 }
 void main(){
 	tokens_file = fopen("C:\\Users\\HP\\Desktop\\compila\\tokens.txt", "r");
