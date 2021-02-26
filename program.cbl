@@ -1,7 +1,6 @@
 
-
 Libraries :
-com: tester la déclaration des bibliothèque; 
+com: tester la déclaration des bibliothèques; 
     lib : name,name2; 
     h : header1,header2; 
  
@@ -56,22 +55,22 @@ com: test des opérateurs arithmétiques;
     i = i ^ 4;
 
 com: test des opérateurs de comparaison;
-    i = i == 4;
-    i = i != 4;
-    i = i <= 4;
-    i = i < 4;
-    i = i >= 4;
-    i = i >4;
+    if (i == 4){}
+    if (i != 4){}
+    if (i <= 4){}
+    if (i < 4){}
+    if (i >= 4){}
+    if (i > 4){}
 
 com: test des opérateurs logique;
-    i = i & 4;
-    i = i | 4;
+    if (w<3) & (i==4){}
+    if (i>5) | (w!=4){}
 
 com: test de la condition if() elif() else;
     if ( i == 4){
         x = x + w[1];
     }elif( i > 4){
-        x = (x - x)%a;
+        x = (x - x) % a;
     }
     else {
     	return 4;
