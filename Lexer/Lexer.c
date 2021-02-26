@@ -8,17 +8,21 @@
 
 //----- Declarations des variables :
 
-const char *programFile = "test.txt"; // "..\\program.cbl"
-const char *outputLex = "test.lex";   //"..\\program.lex"
+const char *programFile = "test.txt";    // "..\\program.cbl"
+const char *lexOutput = "lexOutput.txt"; //"..\\program.lex"
+const char *lexError = "lexError.txt";   //
+
+int line = 1;
 
 /* Main function */
 
 int main()
 {
     program = fopen(programFile, "r");
-    lex = fopen(outputLex, "a");
+    output = fopen(lexOutput, "a");
+    errors = fopen(lexError, "a");
 
-    if (program == NULL || lex == NULL)
+    if (program == NULL || output == NULL || errors == NULL)
     {
         perror("Error while opening the file");
         exit(1);
@@ -29,15 +33,11 @@ int main()
         NextChar();
 
         ignoreWhiteSpaces();
-        //printf("after whitespaces %c\n", currentChar);
         firstTokenChar = ftell(program) - 1; // keep the position of first Token character
         ignoreComment();
 
-        //printf("after Comments %c\n", currentChar);
-
         if (isalpha(currentChar))
         {
-            //printf("Case : Alphabet\n");
             getCurrentWord();
 
             // if one statement return true, then the condition is verified
@@ -46,38 +46,40 @@ int main()
                 isDataType() ||
                 isConditionOrLoop() ||
                 isIdentifier())
-                continue;
+                continue; // skip the other verification functions if token is found
         }
         else if (isdigit(currentChar))
         {
-            //printf("Case : Number \n");
             if (isNumber())
-                continue; // skip the other verification functions
+                continue; // skip the other verification functions if token is found
         }
         else if (currentChar == '\'')
         {
             if (isCharacter())
-                continue;
+                continue; // skip the other verification functions if token is found
         }
         else if (currentChar == '\"')
         {
             if (isString())
-                continue;
+                continue; // skip the other verification functions if token is found
         }
         else
         {
-            //printf("Case :Special symb\n");
             if (isSpecialSymb() ||
                 isOperator())
-                continue;
+                continue; // skip the other verification functions if token is found
         }
 
-        LexError("Invalid Token");
+        if (currentChar != EOF)
+        {
+            LexError("Invalid Token");
+        }
     } while (currentChar != EOF);
 
     fclose(program);
-    fclose(lex);
-    printf("\n\n\n\tFin");
+    fclose(output);
+    fclose(errors);
+    printf("\n\nFin du programme");
     return 1;
 }
 
@@ -90,8 +92,18 @@ char NextChar()
 
 void saveToken(const char *token)
 {
-    printf("%s_TOKEN\n", token);
+    //printf("%s_TOKEN\n", token);
     //fprintf(lex, "%s_TOKEN\n", token);
+}
+
+void LexError(const char *message)
+{
+
+    //fprintf(lex, "Line %d : %s\n", line, message);
+    printf("Line %d : %s\n", line, message);
+    while (NextChar() != '\n')
+        ;
+    //exit(1);
 }
 
 bool search_for_token(const char *word, const char **list, const char **listName, int size_of_list)
@@ -125,12 +137,6 @@ void getCurrentWord()
     sizeofCurrentWord = len; // keep the size of current word
 }
 
-void LexError(const char *message)
-{
-    printf("%s\n", message);
-    exit(1);
-}
-
 void ignoreWhiteSpaces()
 {
     // Ignore blank space, tabulation, newline
@@ -138,6 +144,9 @@ void ignoreWhiteSpaces()
            currentChar == '\t' ||
            currentChar == '\n')
     {
+        if (currentChar == '\n')
+            line++;
+
         NextChar();
     }
 }
@@ -155,7 +164,7 @@ void ignoreComment()
 
         NextChar(); // ignore ;
 
-        printf("------- Comment\n");
+        //printf("------- Comment\n");
 
         ignoreWhiteSpaces();
         firstTokenChar = ftell(program) - 1; // new Token so we keep track for the first character
@@ -218,31 +227,30 @@ bool isNumber()
         while (isdigit(NextChar()))
             ;
 
-        if (currentChar == 'F')
-            saveToken("FLOAT");
-        else if (currentChar == 'D')
-            saveToken("DOUBLE");
+        if (currentChar == 'F' || currentChar == 'D')
+            saveToken("NUM"); // Float or Double
         else
-            LexError("Number not recognized : add F for float or D for double");
+            LexError("Number not recognized");
+
         return TRUE;
     }
 
     if (currentChar == 'L')
     {
-        saveToken("LONG");
+        saveToken("NUM"); // LONG
         return TRUE;
     }
 
     ungetc(currentChar, program); // return back with one char
-    saveToken("INT");
+    saveToken("NUM");             // INT
     return TRUE;
 }
 
 bool isString()
 {
-    while (NextChar() != '\"' && currentChar != EOF)
+    while (NextChar() != '\"' && currentChar != EOF && currentChar != '\n')
         ;
-    if (currentChar == EOF)
+    if (currentChar == EOF || currentChar == '\n')
         return FALSE;
 
     saveToken("STRING");
