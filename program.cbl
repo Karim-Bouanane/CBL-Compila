@@ -8,7 +8,7 @@ com: tester la déclaration des bibliothèques;
 Constants :  
 com: tester tous les types de variables;
     x = 4; 
-    y = 0.5F;
+    y = 0.5;
     z = "Hello";
     w = list< 5, 5.6D, x, 's'>;
     c = 'a';

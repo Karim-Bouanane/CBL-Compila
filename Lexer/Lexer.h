@@ -21,8 +21,8 @@ int firstTokenChar;
 char currentChar;
 
 FILE *program;
-FILE *output;
-FILE *errors;
+FILE *outputFile;
+FILE *errorsFile;
 
 typedef enum
 {
