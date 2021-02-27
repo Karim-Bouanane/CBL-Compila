@@ -2,6 +2,7 @@
 #define SYNTAX_FILE
 
 FILE* tokens_file;
+FILE* error_file;
 char *currentToken;
 
 #define TRUE    1
