@@ -33,79 +33,45 @@ Il s’agit d’un compilateur programmé avec le langage c. Le présent rapport
 
 # **1. Grammaire**
 
-**Prog**  : Lib | Const | Var | Func | Main 
+Terminaux  | Règle
+------- | -------
+**Prog** |  Lib { Const \| Var \| Func } Main
+**Lib** | Libraries : \| [ lib: ID{,ID}; ] \| [ h: ID{,ID}; ] \| e 
+**Const** | Constants : { ID = Value; } \| e 
+**Var** | Variables : { ID [= Value] \| e ; } \| e 
+**Func** | Functions : [ { ID ( { ID \| ID,} ) { Insts \| Return } } ] \| e 
+**Main** | Main ( {ID \| ID,} ) { Insts } 
+**Value** | int \| long \| float \| double \| string \| char \| List \| File \| 
+**Int** | Num { Num } 
+**Long** | Num { Num } L 
+**Float** | Num { Num } [, Num { Num }] \| e F 
+**Double** | Num { Num } [, Num { Num }] \| e D 
+**String** | “ { Alpha \| Num \| Special }  ” 
+**Char**  | ‘Alpha’ 
+**List** | List < { ID \| value \| ID, \|value , \| } >
+**File** | FILE ( string , ‘AccessType’); 
+**AccessType** | r \| w 
+**Insts** | Inst { Inst \| Return }  
+**Inst** | CallFunction ; \| Decision \| Loop \| Affectation 
+**Affectation** | ID { [num] } = { expr \| value} ;
+**CallFunction** | ID ( { ID \| ID, } ) 
+**Condition** | (expr Comp_Op expr) {logic_op (expr com_op expr)}  
+**Decision** |  if ( condition ) { Insts } {elif { Insts } } { else {insts}}
+**Loop** | for ID in Value { Insts } \| for ID in (Num, Num) { Insts } \| while (condition ){ Insts } \|  do{ Ints }while (condition);
+**Expr** | TERM { [+|-] TERM } \| value
+**TERM** | FACT { [ * \| / \| ^ \| % ]  FACT }
+**FACT** | ID{ [num] } \| NUM \| (EXPR) \| CallFunction 
+**Return** | return expr ; 
+**Operator**  | Comp_Op \| Arith_Op \| Assign_Op \| Logic_Op 
+**Comp_Op** | == \| < \| <= \| > \| >= \| != 
+**Arith_Op** | + \| - \| /  \| *  \| ^ \| %  
+**Assign_Op** | = 
+**Logic_Op** | & \| \| 
+**ID**  |  _ \| lettre { _ \| lettre \| chiffre} 
+**Alpha** | a \| .. \| z \| A \| .. \| Z 
+**Num** | 0 \| .. \| 9 
+**Special** | Tous les caractères spéciaux 
 
-**Lib** : Libraries :  [ lib: ID{,ID}; ] | [ h: ID{,ID}; ] | e 
-
-**Const** : Constants : { ID = Value; } | e 
-
-**Var** : Variables : { ID [= Value] | e ; } | e 
-
-**Func** : Functions : [ { ID ( { ID | ID,} ) { Insts | Return } } ] | e 
-
-**Main** : Main ( {ID | ID,} ) { Insts | Return } 
-
-Name_of_function (){
-
-Constants : id=valeur;
-
-Variables : id=valeur ;
-}
-
-**Value** : int | long | float | double | string | char | | List | File  
-
-**Int** : Num { Num } 
-
-**Long** : Num { Num } L 
-
-**Float** : Num { Num } [, Num { Num }] | e F 
-
-**Double** : Num { Num } [, Num { Num }] | e D 
-
-**String** : “ { Alpha | Num | Special }  ” 
-
-**Char**  : ‘Alpha’ 
-
-**List** : List < { ID | ID, } > 
-
-**File** : FILE ( string , ‘AccessType’); 
-
-**AccessType** : r | w 
-
-**Insts** : Inst { Inst }  
-
-**Inst** : CallFunction | Decision | Loop | Expr 
-
-**CallFunction** : ID ( { ID | ID, } ) ; 
-
-**Condition** : ( ID | CallFunction | Value ) Comp_Op ( ID | CallFunction | Value )  
-
-**Decision** :   [ if ( condition ) { Insts } ] | [ if ( condition ) { Insts } elif { Insts } ] 
-
-**Loop** : for ID in Value { Insts } | for ID in (Num, Num) { Insts } | while (condition ){ Insts } | do{ Ints }while (condition);
-
-**Expr** : 
-
-**Return** : return ID | Value ; 
-
-**Operator**  : Comp_Op | Arith_Op | Assign_Op | Logic_Op 
-
-**Comp_Op** : == | < | <= | > | >= | != 
-
-**Arith_Op** : + | - | /  | *  | ^ | %  
-
-**Assign_Op** : = 
-
-**Logic_Op** : & | | 
-
-**ID**  :  _ | lettre { _ | lettre | chiffre} 
-
-**Alpha** : a | .. | z | A | .. | Z 
-
-**Num** : 0 | .. | 9 
-
-**Special** : tous les caractères spéciaux 
-<br>
 </br>
 
 # **2. Documentation** 
