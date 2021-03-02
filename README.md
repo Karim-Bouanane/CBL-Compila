@@ -6,15 +6,15 @@ C’est avec un grand plaisir que nous réservons ces quelques lignes en signe d
 
 On saisit l’occasion pour remercier tous nos enseignants à l’ENSIAS qu’on offert des formations très complètes ce qui nous a aidé a bien aboutir notre projet, et bien précisément notre cours Compilation. Nous tenons également à exprimer notre sincère gratitude envers tous ceux qui nous ont aidé ou ont participé au bon déroulement de ce projet.
 
-Enfin, nous exprimons nos plus vifs remerciements à notre enseignants et encadrants M.Younes TABII, pour leurs précieux conseils et leurs encourage- ments au cours de la préparation de ce projet.
+Enfin, nous exprimons nos plus vifs remerciements à notre enseignant et encadrant M.Younes TABII, pour ses précieux conseils et ses encouragements au cours de la préparation de ce projet.
 
 </br>
 
 ## **Description**
 
-Ce présent projet représente notre travail sur la réalisation d’un compilateur pour le langage propre de l’ENSIAS. Et nous avons travaillé avec le langage C et sans l’utilisation des générateurs de l’analyseur lexicale comme FLEX ou les générateurs de l’analyseur syntaxique comme BISON.
+Ce présent projet représente notre travail qui est  la réalisation d’un compilateur pour le langage propre de l’ENSIAS où nous avons travaillé avec le langage C et sans l’utilisation des générateurs de l’analyseur lexicale comme FLEX ou les générateurs de l’analyseur syntaxique comme BISON.
 
-Afin d’appliquer les méthodologies et les notions enseignées durant le cours compila- tion, nous sommes invités à réaliser un projet qui nous permet d’appliquer nos connaissances théoriques sur le champ pratique.
+Afin d’appliquer les méthodologies et les notions enseignées durant le cours compilation, nous sommes invités à réaliser un projet qui nous permet d’appliquer nos connaissances théoriques sur le champ pratique.
 
 Il s’agit d’un compilateur programmé avec le langage c. Le présent rapport est dédié à la présentation de l’ensemble des travaux menés dans le cadre de notre projet. La première partie est destinée à la présentation du grammaire LL(1) et au lexique. La deuxième partie aborde la réalisation de l’analyseur lexical. La troisième partie est destinée à la réalisation de l’analyseur syntaxique. Enfin, la conclusion générale résume le bilan du travail effectué et les principales perspectives.
 
