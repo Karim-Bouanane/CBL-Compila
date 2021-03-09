@@ -11,7 +11,7 @@ char *currentToken;
 const char* Comp_Op[] = {"EG_TOKEN", "DIFF_TOKEN", "INFEG_TOKEN", 
 					"INF_TOKEN", "SUPEG_TOKEN", "SUP_TOKEN"};
 void get_token();
-void error(char* message);
+void error(char* message, char** stop_token);
 void program();
 void libraries();
 void constants();
