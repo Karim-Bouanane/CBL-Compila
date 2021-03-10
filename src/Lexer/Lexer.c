@@ -8,21 +8,27 @@
 
 //----- Declarations des variables :
 
-const char *programFile = "test.txt";    // "..\\program.cbl"
-const char *lexOutput = "lexOutput.txt"; //"..\\program.lex"
-const char *lexError = "lexError.txt";   //
+const char *outputPathFile = "tokens.txt";
+const char *errorPathFile = "errors.txt"; //
 
 int line = 1;
 
 /* Main function */
 
-int main()
+int main(int argc, char *argv[])
 {
-    program = fopen(programFile, "r");
-    output = fopen(lexOutput, "a");
-    errors = fopen(lexError, "a");
+    // open program from given command argument
+    program = fopen(argv[1], "r");
 
-    if (program == NULL || output == NULL || errors == NULL)
+    // erasing files
+    outputFile = fopen(outputPathFile, "w");
+    errorsFile = fopen(errorPathFile, "w");
+
+    // reopen files with append mode
+    outputFile = freopen(outputPathFile, "a", outputFile);
+    errorsFile = freopen(errorPathFile, "a", errorsFile);
+
+    if (program == NULL || outputFile == NULL || errorsFile == NULL)
     {
         perror("Error while opening the file");
         exit(1);
@@ -77,9 +83,9 @@ int main()
     } while (currentChar != EOF);
 
     fclose(program);
-    fclose(output);
-    fclose(errors);
-    printf("\n\nFin du programme");
+    fclose(outputFile);
+    fclose(errorsFile);
+    printf("Analyse Lexicale Termine\n");
     return 1;
 }
 
@@ -93,17 +99,16 @@ char NextChar()
 void saveToken(const char *token)
 {
     //printf("%s_TOKEN\n", token);
-    //fprintf(lex, "%s_TOKEN\n", token);
+    fprintf(outputFile, "%s_TOKEN\n", token);
 }
 
 void LexError(const char *message)
 {
 
-    //fprintf(lex, "Line %d : %s\n", line, message);
-    printf("Line %d : %s\n", line, message);
+    fprintf(errorsFile, "Line %d : %s\n", line, message);
+    //printf("Line %d : %s\n", line, message);
     while (NextChar() != '\n')
         ;
-    //exit(1);
 }
 
 bool search_for_token(const char *word, const char **list, const char **listName, int size_of_list)
@@ -119,7 +124,6 @@ bool search_for_token(const char *word, const char **list, const char **listName
     return FALSE;
 }
 
-// to modify
 void getCurrentWord()
 {
     fseek(program, firstTokenChar, SEEK_SET); // return to first character in Token
@@ -174,7 +178,6 @@ void ignoreComment()
     NextChar();
 }
 
-// Valid it works well
 bool isBloc()
 {
     if (sizeofCurrentWord > SIZE_ELEMENT_BLOC)
@@ -287,7 +290,6 @@ bool isOperator()
 
 bool isSpecialSymb()
 {
-    //
     char special[2];
     special[0] = currentChar;
     special[1] = 0; // close array

@@ -22,18 +22,19 @@ Il s’agit d’un compilateur programmé avec le langage c. Le présent rapport
 
 ### **Plan de cette documentation**
 1.	Grammaire
-2.	Documentation
-3.	Analyseur Lexicale
-4.	Analyseur Syntaxique
-5.	Fonctionnement du Compilateur
-6.	Future Amélioration
-7.	Conclusion
+2.  Tokens et symboles
+3.	Documentation
+	1. Analyseur Lexicale
+	2. Analyseur Syntaxique
+4.	Fonctionnement du Compilateur
+5.	Future Amélioration
+6.	Conclusion
 
 </br>
 
 # **1. Grammaire**
 
-Terminaux  | Règle
+Terminaux  | Règles
 ------- | -------
 **Prog** |  Lib { Const \| Var \| Func } Main
 **Lib** | Libraries : \| [ lib: ID{,ID}; ] \| [ h: ID{,ID}; ] \| e 
@@ -74,7 +75,112 @@ Terminaux  | Règle
 
 </br>
 
-# **2. Documentation** 
+# **2. Tokens et symboles** 
+
+## **Program Structure Tokens**
+
+Nom      | Symbol
+---------|-------
+LIBRARIES_TOKEN | Libraries 
+CONST_TOKEN | Constants 
+VAR_TOKEN | Variables 
+FUNC_TOKEN | Functions 
+MAIN_TOKEN | Main
+
+</br>
+
+## **Data Type Tokens**
+
+Nom      | Symbol
+---------|-------
+INT_TOKEN | Int 
+FLOAT_TOKEN | Float 
+STRING_TOKEN | String 
+DOUBLE_TOKEN | Double 
+CHAR_TOKEN | Char 
+LONG_TOKEN | Long 
+LIST_TOKEN | List 
+FILE_TOKEN | File 
+
+</br>
+
+## **Arithmetic operator Tokens**
+
+Nom | Symbol
+----|-------
+PLUS_TOKEN | + 
+MOINS_TOKEN | - 
+DIV_TOKEN | / 
+MOD_TOKEN | % 
+MULT_TOKEN | * 
+POWER_TOKEN | ^ 
+EG_TOKEN | == 
+DIFF_TOKEN | != 
+INFEG_TOKEN | <= 
+INF_TOKEN | < 
+SUPEG_TOKEN | >= 
+SUP_TOKEN | > 
+AFF_TOKEN | = 
+
+</br>
+
+## **Logic operator Tokens**
+Nom | Symbol
+----|-------
+AND_TOKEN | & 
+OR_TOKEN | \|
+
+</br>
+
+## **Special Symbol Tokens**
+Nom | Symbol
+----|-------
+BO_TOKEN | [ 
+BF_TOKEN | ] 
+PO_TOKEN | ( 
+PF_TOKEN | ) 
+PV_TOKEN | ; 
+DP_TOKEN | : 
+VIR_TOKEN | , 
+CBO_TOKEN | { 
+CBF_TOKEN | } 
+ST_TOKEN | ‘’ 
+
+</br>
+
+## **Condition Tokens**
+Nom | Symbol
+----|-------
+IF_TOKEN | if
+ELIF_TOKEN | elif 
+ELSE_TOKEN | else
+
+</br>
+
+## **Loop Tokens**
+Nom | Symbol
+----|-------
+WHILE_TOKEN | while 
+DO_TOKEN | do 
+FOR_TOKEN | for 
+IN_TOKEN | in 
+
+</br>
+
+## **Other Tokens**
+Nom | Symbol
+----|-------
+ID_TOKEN
+NUM_TOKEN
+EOF_TOKEN
+VARIABLE_TOKEN | variable 
+LIB_TOKEN | Lib  
+H_TOKEN | H 
+RETURN_TOKEN | return
+
+</br>
+
+# **3. Documentation** 
 
 ## **2.1. Analyseur Lexicale**
 
@@ -86,99 +192,216 @@ Terminaux  | Règle
 char NextChar();
 
 /*	Fonction 	: SaveToken
-	Description : 
+	Description : Enregistre dans un fichier, le token actuel sous forme de texte.
 */
 void saveToken(const char* token);
 
 /*	Fonction 	: LexError
-	Description : S’assure qu’il n’y a pas d’erreurs lexicales. Dans l’autre cas elle retourne un message d’erreur.
+	Description : Enregistre l'erreur dans un fichier, et ignore la ligne actuel du programme.
 */
 void LexError(const char* message);
 
 /* 	Fonction 	: ignoreWhiteSpaces
-	Description : Ignore  les séparateurs comme la tabulation, les espaces et les nouvelles lignes.
-	Arguments :  NULL
+	Description : Ignore  les séparateurs comme les tabulations, les espaces et les nouvelles lignes.
 */
 void ignoreWhiteSpaces();
 
 /*	Fonction	: ignoreComment
-	Description	: Ignore  les commentaires.
+	Description	: Ignore un seul commentaire.
 */
 void ignoreComment();
 
 /*	Fonction 	: getCurrentword
-	Description : Lit le mot précédent	
+	Description : Lit tout un mot depuis le charactère actuel
 */
 void getCurrentWord();
 
+/*	Fonction 	: search_for_token
+	Description : Reçoit une liste de tokens et un mot et cherche sa correspondence dans cette liste
+*/
+bool search_for_token();
+
 /*	Fonction	: isNumber
-	Description	: Construit le nombre et vérifie si c’est un entier ou un réel. Sinon elle le traite comme un invalide Nombre, et arrête le programme.
+	Description	: Construit le nombre et vérifie si c’est un INT, LONG, FLOAT, DOUBLE. Sinon elle le traite comme un invalide Nombre.
 */
 bool isNumber();
 
 /*	Fonction	: isBloc
-	Description	: 
+	Description	: Vérifie si le token correspond aux différents étages du programme : Libraries, Constants, Variables, Functions, Main
 */
 bool isBloc();
 
 /*	Fonction	: isReturn
-	Description	: 
+	Description	: Vérifie si le token correspond au mot clé "return"
 */
 bool isReturn();
 
 /*	Fonction	: isString
-	Description	: Construit le mot, et vérifie si c’est un mot réservé pour la fonction, les décisions, les boucles ou pour le vecteur. Sinon elle test si c’est un appel de fonction où le considère comme un identificateur.
+	Description	: Construit le mot, et vérifie si respecte la forme suivante <" texte ">
 */
 bool isString();
 
 /*	Fonction	: isIdentifier
-	Description	: 
+	Description	: Il n'y a pas de comparaison dans cette fonction, parceque dans ce cas tous les tests sur le token qui commence avec alphabet ont échoué, donc il ne reste que le déclaré comme Identificateur.
 */
 bool isIdentifier();
 
 /*	Fonction	: isDataType
-	Description	: 
+	Description	: Deux types de données qui se déclare explicitement et qui sont <list, FILE>
 */
 bool isDataType();
 
 /*	Fonction	: isConditionOrLoop
-	Description	: 
+	Description	: Vérifie si le Token appartient aux tokens réservés pour les conditions et les boucles.
 */
 bool isConditionOrLoop();
 
 /*	Fonction	: isCharacter
-	Description	: 
+	Description	: Un token de type charactère respecte la forme suivante <'c'> avec c un charactère quelconque.
 */
 bool isCharacter();
 
 /*	Fonction	: isOperator
-	Description	: Vérifie si c’est opérateur tel la division, la multiplication, la soustraction, l’addition.
+	Description	: Vérifie si c’est opérateur correspond à la division, la multiplication, la soustraction, l’addition etc ...
 */
 bool isOperator();
 
 /*	Fonction	: isSpecialSymb
-	Description	: Vérifie si c’est un charactère spécial, et en cas où elle trouve les guillemets, elle vérifie si c’est un texte.
+	Description	: Vérifie si c’est un charactère spécial.
 */
 bool isSpecialSymb();
-
-/*	Fonction	: search_for_token
-	Description	: 
-*/
-bool search_for_token(const char *word, const char **list, const char **listName, int size_of_list);
 ```
 
 ## **2.2. Analyseur Syntaxique**
 ```c
+/*	Fonction	: getToken
+	Description : A chaque appel, la fonction getToken donne le token suivant.
+*/
+void getToken()
 
+/*	Fonction	: error
+	Description : S’assure qu’il n’y a pas d’erreurs syntaxiques. Dans l’autre cas elle enregistre un message d’erreur dans un fichier « error.txt » et saute les token reçu jusqu’au une fin de l’instruction erronée. 
+*/
+int error(char* message)
+
+/*	Fonction	: program
+	Description : Vérifie le token courrant , appelle les fonctions correspondantes au bloc qui représente le token   
+*/
+void program()
+
+/*	Fonction	: libraries
+	Description : Teste si l’expression représente soit la déclaration d’une librairie ou bien d’un header
+*/
+void libraries()
+
+/*	Fonction	: constants
+	Description : Vérifie la syntaxe de déclaration des constants dans le bloc constants()
+*/
+void constants()
+
+/*	Fonction	: variables
+	Description : Assure que la déclaration des variables est bien faite 
+*/
+void variables()
+
+/*	Fonction	: functions
+	Description : Teste si l’expression actuel représente une déclaration de fonction sous la forme : Function(arguments){instructions}
+*/
+void functions()
+
+/*	Fonction	: Insts
+	Description : Appel la fonction Inst() , tanque cette dernière return true 
+*/
+void Insts()
+
+/*	Fonction	: Inst
+	Description : vérifie tous sorte d’instructions qui peuvent se produire et fait appel aux fonctions correspondantes à chaque instruction. 
+*/
+bool Inst()
+
+/*	Fonction	: list
+	Description : vérifie si l’affectation d’une donnée à un élément de la liste est valide 
+*/
+void list()
+ 
+/*	Fonction	: callFunction
+	Description : Teste si l’expression d’appel fonction avec ses arguments est valide.
+*/
+void callFunction()
+
+/*	Fonction	: condition
+	Description : Teste si l’expression actuel représente la syntaxe d’une instruction conditionnelle qui est sous cette forme : ( ID | CallFunction | Value ) Comp_Op ( ID | CallFunction | Value ) 
+*/
+void condition()
+
+/*	Fonction	: decision
+	Description : Teste si l’expression actuel représente une instruction conditionnelle sous la forme de : if (condition) {expressions} ou bien if (condition) {expressions} elif {expressions}
+*/
+void decision()
+
+/*	Fonction	: loop
+	Description : Teste si l’instruction courante représente l’une des trois instructions de boucle (voir grammaire) 
+*/
+void loop()
+
+/*	Fonction	: expr
+	Description : Vérifie si la syntaxe représentée dans la grammaire de l’expression est valide. Voir la grammaire de  « expr »;
+*/
+void expr()
+
+/*	Fonction	: exprBegin
+	Description : Vérifie si la syntaxe représentée dans le début de la grammaire de l’expression est valide. Si oui il passe le token suivant a la fonction expr();
+*/
+void exprBegin()
+
+/*	Fonction	: term
+	Description : Vérifie si la syntaxe représentée dans la grammaire de Term  est valide. Voir la grammaire de  « TERM »;
+*/
+void term()
+
+/*	Fonction	: fact
+	Description : Teste si le token actuel représente soit Id , NUM ou bien une expression  
+*/
+void fact()
+
+/*	Fonction	: is_value
+	Description : Vérifie si le type de données est parmi les types suivants {num , char, string,list ou bien FILE} 
+*/
+void is_value()
+
+/*	Fonction	: main
+	Description : Teste si l’expression actuel représente la déclaration de la fonction  main sous la forme : Main(arguments){instructions}
+*/
+void main()
 ```
 </br>
 
 
-# **3. Fonctionnement du Compilateur**
-# **4. Future Amélioration**
+# **4. Fonctionnement du Compilateur**
+
+Le compilateur récupère en entrée le trajet complet du fichier où se trouve le programme écrit dans le language cbl, ce fichier aura l'extension .cbl. 
+
+Avant d'entamer les étapes de compilation, le compilateur s'assure que le fichier est non vide, puis passe à la première étape qui est l'analyse lexicale. Le compilateur recourt à l'exécutable de cet analyseur et lui fournit le trajet du fichier programme. A la fin de cette étape on aura comme sortie un fichier contenant les erreurs, ainsi qu'un autre contenant les tokens générés par l'analyseur lexicale.
+
+Dans le cas où le fichier erreur soit non vide, le compilateur procède comme suit : il renvoie à l'écran les erreurs trouvés ainsi que la ligne où se trouve, puis termine la compilation. Dans l'autre cas, le compilateur procède à la deuxième étape qui est l'analyse syntaxique, et de la même manière qu'auparavant, le compilateur fait appel à l'éxécutable de l'analyseur syntaxique en lui fournissant cette fois deux fichiers celui du programme et celui des tokens. 
+
+Le compilateur attend la fin de l'exécution pour vérifier si des erreurs syntaxiques existent, dans ce cas ils les affichents et se termine. Dans l'autre cas on aura une compilation réussi.
+
+</br>
+
+# **5. Future Amélioration**
+
+-	Ajout des qualificateurs qui détermine le champ de visibilité des variables et des fonctions ainsi que la durée de vie tel que les mots clés : public, private, static, automatic.
+-	Ajout de l’analyseur sémantique.
+-	Indiquer précisemment où se trouve l'erreur en indiquant la colonne et la ligne.
+-	Ajout des fonctions prédéfinies standard.
+-	Création du préprocesseur et ajout des mots clés des instructions macro tel que #define, #ifndef, #ifdef, #endif
+-	Créer une application qui installera notre compilateur sur le système d'exploitation.
 
 
-# **5. Conclusion**
+</br>
+
+# **6. Conclusion**
 
 Ce projet nous a permis de parfaitement comprendre la chaîne de compilation d’un code. Et nous a donné l’occasion de découvrir énormément de problèmes liés notamment à l’analyse, qui n’étaient pas aussi évidents dans la théorie du cours.
 
