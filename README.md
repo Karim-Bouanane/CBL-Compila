@@ -222,12 +222,14 @@ void getCurrentWord();
 bool search_for_token();
 
 /*	Fonction	: isNumber
-	Description	: Construit le nombre et vérifie si c’est un INT, LONG, FLOAT, DOUBLE. Sinon elle le traite comme un invalide Nombre.
+	Description	: Construit le nombre et vérifie si c’est un INT, LONG, FLOAT, DOUBLE.
+			  Sinon elle le traite comme un invalide Nombre.
 */
 bool isNumber();
 
 /*	Fonction	: isBloc
-	Description	: Vérifie si le token correspond aux différents étages du programme : Libraries, Constants, Variables, Functions, Main
+	Description	: Vérifie si le token correspond aux différents étages du programme : 
+			   Libraries, Constants, Variables, Functions, Main
 */
 bool isBloc();
 
@@ -242,7 +244,8 @@ bool isReturn();
 bool isString();
 
 /*	Fonction	: isIdentifier
-	Description	: Il n'y a pas de comparaison dans cette fonction, parceque dans ce cas tous les tests sur le token qui commence avec alphabet ont échoué, donc il ne reste que le déclaré comme Identificateur.
+	Description	: Il n'y a pas de comparaison dans cette fonction, parceque dans ce cas
+	tous les tests sur le token qui commence avec alphabet ont échoué, donc il ne reste que le déclaré comme Identificateur.
 */
 bool isIdentifier();
 
@@ -280,7 +283,9 @@ bool isSpecialSymb();
 void getToken()
 
 /*	Fonction	: error
-	Description : S’assure qu’il n’y a pas d’erreurs syntaxiques. Dans l’autre cas elle enregistre un message d’erreur dans un fichier « error.txt » et saute les token reçu jusqu’au une fin de l’instruction erronée. 
+	Description : S’assure qu’il n’y a pas d’erreurs syntaxiques. Dans l’autre cas elle enregistre 
+	              un message d’erreur dans un fichier « error.txt » et saute les token reçu jusqu’au une fin 
+		      de l’instruction erronée. 
 */
 int error(char* message)
 
@@ -305,7 +310,8 @@ void constants()
 void variables()
 
 /*	Fonction	: functions
-	Description : Teste si l’expression actuel représente une déclaration de fonction sous la forme : Function(arguments){instructions}
+	Description : Teste si l’expression actuel représente une déclaration de fonction sous la forme :
+	               Function(arguments){instructions}
 */
 void functions()
 
@@ -315,7 +321,8 @@ void functions()
 void Insts()
 
 /*	Fonction	: Inst
-	Description : vérifie tous sorte d’instructions qui peuvent se produire et fait appel aux fonctions correspondantes à chaque instruction. 
+	Description : vérifie tous sorte d’instructions qui peuvent se produire et fait appel aux fonctions 
+	              correspondantes à chaque instruction. 
 */
 bool Inst()
 
@@ -330,12 +337,14 @@ void list()
 void callFunction()
 
 /*	Fonction	: condition
-	Description : Teste si l’expression actuel représente la syntaxe d’une instruction conditionnelle qui est sous cette forme : ( ID | CallFunction | Value ) Comp_Op ( ID | CallFunction | Value ) 
+	Description : Teste si l’expression actuel représente la syntaxe d’une instruction conditionnelle qui est sous cette forme : 
+	                ( ID | CallFunction | Value ) Comp_Op ( ID | CallFunction | Value ) 
 */
 void condition()
 
 /*	Fonction	: decision
-	Description : Teste si l’expression actuel représente une instruction conditionnelle sous la forme de : if (condition) {expressions} ou bien if (condition) {expressions} elif {expressions}
+	Description : Teste si l’expression actuel représente une instruction conditionnelle sous la forme de : 
+	               if (condition) {expressions} ou bien if (condition) {expressions} elif {expressions}
 */
 void decision()
 
@@ -350,7 +359,8 @@ void loop()
 void expr()
 
 /*	Fonction	: exprBegin
-	Description : Vérifie si la syntaxe représentée dans le début de la grammaire de l’expression est valide. Si oui il passe le token suivant a la fonction expr();
+	Description : Vérifie si la syntaxe représentée dans le début de la grammaire de l’expression est valide. 
+	               Si oui il passe le token suivant a la fonction expr();
 */
 void exprBegin()
 
