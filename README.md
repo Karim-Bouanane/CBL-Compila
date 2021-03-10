@@ -245,8 +245,9 @@ bool isString();
 
 /*	Fonction	: isIdentifier
 	Description	: Il n'y a pas de comparaison dans cette fonction, parceque dans ce cas
-	tous les tests sur le token qui commence avec alphabet ont échoué, donc il ne reste que le déclaré comme Identificateur.
-*/
+			  tous les tests sur le token qui commence avec alphabet ont échoué, 
+			  donc il ne reste que le déclaré comme Identificateur.
+		*/
 bool isIdentifier();
 
 /*	Fonction	: isDataType
