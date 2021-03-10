@@ -338,8 +338,9 @@ void list()
 void callFunction()
 
 /*	Fonction	: condition
-	Description : Teste si l’expression actuel représente la syntaxe d’une instruction conditionnelle qui est sous cette forme : 
-	                ( ID | CallFunction | Value ) Comp_Op ( ID | CallFunction | Value ) 
+	Description : Teste si l’expression actuel représente la syntaxe d’une instruction conditionnelle 
+	               qui est sous cette forme : 
+	               ( ID | CallFunction | Value ) Comp_Op ( ID | CallFunction | Value ) 
 */
 void condition()
 
@@ -355,7 +356,8 @@ void decision()
 void loop()
 
 /*	Fonction	: expr
-	Description : Vérifie si la syntaxe représentée dans la grammaire de l’expression est valide. Voir la grammaire de  « expr »;
+	Description : Vérifie si la syntaxe représentée dans la grammaire de l’expression est valide. 
+		      Voir la grammaire de  « expr »;
 */
 void expr()
 
@@ -366,7 +368,8 @@ void expr()
 void exprBegin()
 
 /*	Fonction	: term
-	Description : Vérifie si la syntaxe représentée dans la grammaire de Term  est valide. Voir la grammaire de  « TERM »;
+	Description : Vérifie si la syntaxe représentée dans la grammaire de Term  est valide. 
+	               Voir la grammaire de  « TERM »;
 */
 void term()
 
