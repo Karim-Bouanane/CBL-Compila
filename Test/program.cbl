@@ -1,11 +1,11 @@
 
-
+Libraries:
 com: tester la déclaration des bibliothèques; 
-    lib : name name2; 
+    lib : name ,name2; 
     h : header1,header2; 
  
 
-
+Constants:
 com: tester tous les types de variables;
     x = 4;
     y = 0.5F;
