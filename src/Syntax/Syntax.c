@@ -26,6 +26,7 @@ void error(char *message, char **stop_token)
 	bool no_stop = TRUE;
 	fprintf(error_file, "syntax error: %s\n", message);
 	fflush(error_file);
+	//printf("inside error");
 	do
 	{
 		for (int i = 0; stop_token[i] != "\0"; i++)
@@ -33,12 +34,14 @@ void error(char *message, char **stop_token)
 			if (strcmp(currentToken, stop_token[i]) == 0)
 			{
 				no_stop = FALSE;
+				//printf("leaving error");
 				return;
 			}
 		}
 		if (no_stop == TRUE)
 			get_token();
 	} while (no_stop);
+	//printf("leaving error");
 }
 void program()
 {
@@ -58,14 +61,16 @@ void program()
 		if (strcmp(currentToken, "DP_TOKEN") != 0)
 			error("expecting ':' after Constants", (char *[]){"PV_TOKEN", "\0"});
 		constants();
-	}
+	}else
+		error("block constants missing", (char *[]){"VAR_TOKEN", "FUNC_TOKEN", "MAIN_TOKEN", "\0"});
 	if (strcmp(currentToken, "VAR_TOKEN") == 0)
 	{
 		get_token();
 		if (strcmp(currentToken, "DP_TOKEN") != 0)
 			error("expecting ':' after Variables", (char *[]){"PV_TOKEN", "\0"});
 		variables();
-	}
+	}else
+		error("block variables missing", (char *[]){"FUNC_TOKEN", "MAIN_TOKEN", "\0"});
 	if (strcmp(currentToken, "FUNC_TOKEN") == 0)
 	{
 		get_token();
@@ -77,7 +82,8 @@ void program()
 		{
 			functions();
 		} while (strcmp(currentToken, "ID_TOKEN") == 0);
-	}
+	}else
+		error("block functions missing", (char *[]){"MAIN_TOKEN", "\0"});
 	if (strcmp(currentToken, "MAIN_TOKEN") == 0)
 	{
 		Main();
