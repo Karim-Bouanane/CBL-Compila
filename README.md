@@ -261,13 +261,14 @@ bool isDataType();
 bool isConditionOrLoop();
 
 /*	Fonction	: isCharacter
-	Description	: Un token de type charactère respecte la forme suivante <'c'> avec c un charactère quelconque.
+	Description	: Un token de type charactère respecte la forme suivante <'c'> avec c un 
+			  charactère quelconque.
 */
 bool isCharacter();
 
 /*	Fonction	: isOperator
-	Description	: Vérifie si c’est opérateur correspond à la division, la multiplication, la soustraction,
-			  l’addition etc...
+	Description	: Vérifie si c’est opérateur correspond à la division, la multiplication,
+			   la soustraction, l’addition etc...
 */
 bool isOperator();
 
@@ -292,7 +293,8 @@ void getToken()
 int error(char* message)
 
 /*	Fonction	: program
-	Description : Vérifie le token courrant , appelle les fonctions correspondantes au bloc qui représente le token   
+	Description : Vérifie le token courrant , appelle les fonctions correspondantes
+		      au bloc qui représente le token   
 */
 void program()
 
@@ -346,13 +348,14 @@ void callFunction()
 void condition()
 
 /*	Fonction	: decision
-	Description : Teste si l’expression actuel représente une instruction conditionnelle sous la forme de : 
+	Description : Teste si l’expression actuel représente une instruction conditionnelle sous la forme de: 
 	               if (condition) {expressions} ou bien if (condition) {expressions} elif {expressions}
 */
 void decision()
 
 /*	Fonction	: loop
-	Description : Teste si l’instruction courante représente l’une des trois instructions de boucle (voir grammaire) 
+	Description : Teste si l’instruction courante représente l’une des trois instructions de boucle 
+		      (voir grammaire) 
 */
 void loop()
 
@@ -363,8 +366,9 @@ void loop()
 void expr()
 
 /*	Fonction	: exprBegin
-	Description : Vérifie si la syntaxe représentée dans le début de la grammaire de l’expression est valide. 
-	               Si oui il passe le token suivant a la fonction expr();
+	Description : Vérifie si la syntaxe représentée dans le début de la grammaire de 
+		      l’expression est valide. 
+	              Si oui il passe le token suivant a la fonction expr();
 */
 void exprBegin()
 
@@ -380,12 +384,13 @@ void term()
 void fact()
 
 /*	Fonction	: is_value
-	Description : Vérifie si le type de données est parmi les types suivants {num , char, string,list ou bien FILE} 
+	Description : Vérifie si le type de données est parmi les types suivants 
+	              {num , char, string,list ou bien FILE} 
 */
 void is_value()
 
 /*	Fonction	: main
-	Description : Teste si l’expression actuel représente la déclaration de la fonction  main sous la forme : 
+	Description : Teste si l’expression actuel représente la déclaration de la fonction main sous la forme : 
 		      Main(arguments){instructions}
 */
 void main()
