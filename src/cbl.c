@@ -22,30 +22,17 @@ void printErrors();
 
 int main(int argc, char *argv[])
 {
-    char commandLex[50] = "cd Lexer && Lexer.exe ";
-    char commandSyntax[50] = "cd Suntax && syntax.exe ";
+    char commandLex[50] = "Lexer.exe ";
+    char commandSyntax[50] = "Syntax.exe ";
 
     if (argc == 2) // check user give the name of program to compile
     {
         if (access(argv[1], F_OK) == 0) // program file exist
         {
-            // Get current directory path and put it inside ""
-            char currentDirPath[256];
-            char programPath[256] = "\0";
 
-            getcwd(currentDirPath, sizeof(currentDirPath));
+            /*** Phase for lexical analyzer ***/
 
-            strcat(programPath, "\"");
-            strcat(programPath, currentDirPath);
-            strcat(programPath, "\\");
-            strcat(programPath, argv[1]);
-            strcat(programPath, "\"");
-
-            printf("program %s\n", programPath);
-
-            // Phase for lexical analyzer
-
-            strcat(commandLex, programPath);
+            strcat(commandLex, argv[1]);
 
             if (system(commandLex) == -1) // if error occur while executing lexical analyzer
             {
@@ -53,34 +40,51 @@ int main(int argc, char *argv[])
                 exit(1);
             }
 
-            FILE *lexErrorsFile = fopen("errors.txt", "r"); //./Lexer/errors.txt
+            FILE *lexErrorsFile = fopen("LexErrors", "r");
 
             if (!isempty(lexErrorsFile)) // If lexical errors exist, print them and exit the program
             {
-                printf("Try to solve lexical errors\n\n");
+                printf("\n Failed Compilation \n ");
+                printf("Try to solve lexical errors: \n");
                 printErrors(lexErrorsFile);
+
+                // remove files of the output of lexical analyser
                 fclose(lexErrorsFile);
+                remove("LexErrors");
+                remove("Tokens");
                 exit(1);
             }
 
-            // Phase for syntax analyzer
+            fclose(lexErrorsFile);
+            remove("LexErrors");
 
-            strcat(commandSyntax, programPath);
+            /*** Phase for syntax analyzer ***/
+
+            strcat(commandSyntax, argv[1]);
 
             if (system(commandSyntax) == -1) // if error occur while executing lexical analyzer
             {
                 perror("An error occur when executing syntaxic analyzer\n");
             }
 
-            FILE *SyntaxErrorsFile = fopen("./Syntax/errors.txt", "r");
+            FILE *SyntaxErrorsFile = fopen("SyntErrors", "r");
 
             if (!isempty(SyntaxErrorsFile)) // If syntaxic errors exist, print them and exit the program
             {
-                printf("Try to solve syntax errors\n\n");
+                printf("\n Failed Compilation \n ");
+                printf("Try to solve syntax errors: \n");
                 printErrors(SyntaxErrorsFile);
+
+                // remove syntax analyser output files when finishing of them
                 fclose(SyntaxErrorsFile);
+                remove("SyntErrors");
+                remove("Tokens");
                 exit(1);
             }
+
+            fclose(SyntaxErrorsFile);
+            remove("Tokens");
+            remove("SyntErrors");
 
             printf("Success compilation\n");
         }
@@ -117,6 +121,7 @@ bool isempty(FILE *fp)
 
 void printErrors(FILE *fp)
 {
+    fseek(fp, 0, SEEK_SET);
     char line[50];
 
     while (fgets(line, sizeof(line), fp))

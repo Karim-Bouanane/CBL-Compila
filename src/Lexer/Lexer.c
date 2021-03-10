@@ -8,8 +8,8 @@
 
 //----- Declarations des variables :
 
-const char *outputPathFile = "tokens.txt";
-const char *errorPathFile = "errors.txt"; //
+const char *tokensPathFile = "Tokens";
+const char *errorPathFile = "LexErrors";
 
 int line = 1;
 
@@ -20,15 +20,11 @@ int main(int argc, char *argv[])
     // open program from given command argument
     program = fopen(argv[1], "r");
 
-    // erasing files
-    outputFile = fopen(outputPathFile, "w");
+    // open files with append mode
+    tokensFile = fopen(tokensPathFile, "w");
     errorsFile = fopen(errorPathFile, "w");
 
-    // reopen files with append mode
-    outputFile = freopen(outputPathFile, "a", outputFile);
-    errorsFile = freopen(errorPathFile, "a", errorsFile);
-
-    if (program == NULL || outputFile == NULL || errorsFile == NULL)
+    if (program == NULL || tokensFile == NULL || errorsFile == NULL)
     {
         perror("Error while opening the file");
         exit(1);
@@ -83,7 +79,7 @@ int main(int argc, char *argv[])
     } while (currentChar != EOF);
 
     fclose(program);
-    fclose(outputFile);
+    fclose(tokensFile);
     fclose(errorsFile);
     printf("Analyse Lexicale Termine\n");
     return 1;
@@ -99,7 +95,7 @@ char NextChar()
 void saveToken(const char *token)
 {
     //printf("%s_TOKEN\n", token);
-    fprintf(outputFile, "%s_TOKEN\n", token);
+    fprintf(tokensFile, "%s_TOKEN\n", token);
 }
 
 void LexError(const char *message)
