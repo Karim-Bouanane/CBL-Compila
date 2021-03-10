@@ -265,7 +265,8 @@ bool isConditionOrLoop();
 bool isCharacter();
 
 /*	Fonction	: isOperator
-	Description	: Vérifie si c’est opérateur correspond à la division, la multiplication, la soustraction, l’addition etc ...
+	Description	: Vérifie si c’est opérateur correspond à la division, la multiplication, la soustraction,
+			  l’addition etc...
 */
 bool isOperator();
 
@@ -380,7 +381,8 @@ void fact()
 void is_value()
 
 /*	Fonction	: main
-	Description : Teste si l’expression actuel représente la déclaration de la fonction  main sous la forme : Main(arguments){instructions}
+	Description : Teste si l’expression actuel représente la déclaration de la fonction  main sous la forme : 
+		      Main(arguments){instructions}
 */
 void main()
 ```
