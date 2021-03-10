@@ -256,7 +256,8 @@ bool isIdentifier();
 bool isDataType();
 
 /*	Fonction	: isConditionOrLoop
-	Description	: Vérifie si le Token appartient aux tokens réservés pour les conditions et les boucles.
+	Description	: Vérifie si le Token appartient aux tokens réservés pour les conditions 
+			  et les boucles.
 */
 bool isConditionOrLoop();
 
@@ -287,8 +288,8 @@ void getToken()
 
 /*	Fonction	: error
 	Description : S’assure qu’il n’y a pas d’erreurs syntaxiques. Dans l’autre cas elle enregistre 
-	              un message d’erreur dans un fichier « error.txt » et saute les token reçu jusqu’au une fin 
-		      de l’instruction erronée. 
+	              un message d’erreur dans un fichier « error.txt » et saute les token 
+		      reçu jusqu’a la fin de l’instruction erronée. 
 */
 int error(char* message)
 
@@ -299,7 +300,8 @@ int error(char* message)
 void program()
 
 /*	Fonction	: libraries
-	Description : Teste si l’expression représente soit la déclaration d’une librairie ou bien d’un header
+	Description : Teste si l’expression représente soit la déclaration d’une librairie 
+		      ou bien d’un header
 */
 void libraries()
 
@@ -314,8 +316,8 @@ void constants()
 void variables()
 
 /*	Fonction	: functions
-	Description : Teste si l’expression actuel représente une déclaration de fonction sous la forme :
-	               Function(arguments){instructions}
+	Description : Teste si l’expression actuel représente une déclaration de fonction 
+	              sous la forme : Function(arguments){instructions}
 */
 void functions()
 
@@ -348,8 +350,9 @@ void callFunction()
 void condition()
 
 /*	Fonction	: decision
-	Description : Teste si l’expression actuel représente une instruction conditionnelle sous la forme de: 
-	               if (condition) {expressions} ou bien if (condition) {expressions} elif {expressions}
+	Description : Teste si l’expression actuel représente une instruction conditionnelle 
+		      sous la forme de: if (condition) {expressions} 
+		      ou bien if (condition) {expressions} elif {expressions}
 */
 void decision()
 
@@ -390,8 +393,8 @@ void fact()
 void is_value()
 
 /*	Fonction	: main
-	Description : Teste si l’expression actuel représente la déclaration de la fonction main sous la forme : 
-		      Main(arguments){instructions}
+	Description : Teste si l’expression actuel représente la déclaration 
+		      de la fonction main sous la forme : Main(arguments){instructions}
 */
 void main()
 ```
